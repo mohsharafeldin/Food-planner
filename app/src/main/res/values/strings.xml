@@ -1,21 +1,3 @@
 <resources>
     <string name="app_name">FoodPlanner</string>
-    <!-- Authentication -->
-    <string name="welcome_back">Welcome Back!</string>
-    <string name="login_subtitle">Sign in to continue planning your meals</string>
-    <string name="create_account">Create Account</string>
-    <string name="signup_subtitle">Start your meal planning journey</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="full_name">Full Name</string>
-    <string name="login">Login</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="or">OR</string>
-    <string name="continue_with_google">Continue with Google</string>
-    <string name="continue_as_guest">Continue as Guest</string>
-    <string name="dont_have_account">Don\'t have an account?</string>
-    <string name="already_have_account">Already have an account?</string>
-    <string name="logout">Logout</string>
-    <string name="back">Back</string>
 </resources>
