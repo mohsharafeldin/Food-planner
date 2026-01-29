@@ -1,5 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Primary Colors - Vibrant Green Theme -->
+    <color name="primary_color">#13ec5b</color>
+    <color name="primary_dark">#0ea640</color>
+    <color name="primary_light">#5fff8d</color>
+    <color name="accent_color">#13ec5b</color>
+
+    <!-- Background Colors - Dark Theme -->
+    <color name="background_color">#FAFAFA</color>
+    <color name="background_light">#f6f8f6</color>
+    <color name="background_dark">#102216</color>
+    <color name="background_dark_translucent">#D9102216</color>
+    <color name="surface_color">#FFFFFF</color>
+    <color name="surface_dark">#193322</color>
+    <color name="surface_dark_elevated">#162e1e</color>
+    <color name="card_dark">#1c2e24</color>
+    <color name="splash_background">#102216</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_primary_light">#212121</color>
+    <color name="text_secondary">#92c9a4</color>
+    <color name="text_secondary_light">#757575</color>
+    <color name="text_hint">#5c8a6d</color>
+    <color name="border_dashed">#2a4535</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="black_80">#CC000000</color>
+    <color name="black_60">#99000000</color>
+    <color name="black_40">#66000000</color>
+    <color name="black_20">#33000000</color>
+
+    <!-- Border Colors -->
+    <color name="border_dark">#326744</color>
+    <color name="border_light">#E0E0E0</color>
+    <color name="divider_color">#1AFFFFFF</color>
+    <color name="divider_dark">#14FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="error_color">#F44336</color>
+    <color name="success_color">#13ec5b</color>
+    <color name="favorite_color">#E91E63</color>
+    <color name="warning_color">#FF9800</color>
+
+    <!-- Category Colors -->
+    <color name="category_1">#13ec5b</color>
+    <color name="category_2">#4CAF50</color>
+    <color name="category_3">#2196F3</color>
+    <color name="category_4">#9C27B0</color>
+    <color name="category_5">#FF9800</color>
+    <color name="category_6">#00BCD4</color>
+
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#80000000</color>
+    <color name="gradient_middle">#40000000</color>
+    <color name="gradient_end">#00000000</color>
+
+    <!-- Shimmer -->
+    <color name="shimmer_background">#1AFFFFFF</color>
+    <color name="shimmer_highlight">#33FFFFFF</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
 </resources>
