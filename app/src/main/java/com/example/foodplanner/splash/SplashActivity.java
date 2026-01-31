@@ -7,10 +7,10 @@ import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.testfoodplanner.MainActivity;
-import com.example.testfoodplanner.R;
-import com.example.testfoodplanner.auth.view.AuthActivity;
-import com.example.testfoodplanner.utils.SessionManager;
+import com.example.foodplanner.MainActivity;
+import com.example.foodplanner.R;
+import com.example.foodplanner.auth.view.AuthActivity;
+import com.example.foodplanner.utils.SessionManager;
 
 public class SplashActivity extends AppCompatActivity {
 

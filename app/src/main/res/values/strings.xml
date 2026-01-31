@@ -18,4 +18,11 @@
     <string name="already_have_account">Already have an account?</string>
     <string name="logout">Logout</string>
     <string name="back">Back</string>
+    <!-- Search -->
+    <string name="search_meals">Search meals...</string>
+    <string name="search_by_name">By Name</string>
+    <string name="search_by_category">By Category</string>
+    <string name="search_by_country">By Country</string>
+    <string name="search_by_ingredient">By Ingredient</string>
+    <string name="no_results">No meals found</string>
 </resources>
