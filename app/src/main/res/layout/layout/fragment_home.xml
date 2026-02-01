@@ -201,7 +201,7 @@
                 tools:itemCount="6"
                 tools:listitem="@layout/item_category" />
 
-            <!-- Trending Title -->
+            <!-- Countries Title -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -214,20 +214,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/trending_recipes"
+                    android:text="Countries"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_see_all_trending"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="@string/see_all"
-                    android:textColor="@color/primary_color"
-                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </LinearLayout>

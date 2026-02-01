@@ -20,6 +20,8 @@
             android:id="@+id/tv_country_flag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="1.0"
+            android:textColor="@color/white"
             android:text="🇺🇸"
             android:textSize="32sp" />
 
