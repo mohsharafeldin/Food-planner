@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/surface_color"
+        android:background="@color/surface_dark"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="8dp">
@@ -20,6 +20,8 @@
             android:id="@+id/tv_country_flag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="1.0"
+            android:textColor="@color/white"
             android:text="🇺🇸"
             android:textSize="32sp" />
 
