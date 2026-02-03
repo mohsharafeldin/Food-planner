@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.data.local;
+package com.example.foodplanner.data.local;
 
 import android.content.Context;
 
@@ -6,10 +6,11 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.testfoodplanner.data.model.FavoriteMeal;
-import com.example.testfoodplanner.data.model.PlannedMeal;
+import com.example.foodplanner.data.model.FavoriteMeal;
+import com.example.foodplanner.data.model.PlannedMeal;
+import com.example.foodplanner.data.model.User;
 
-@Database(entities = { FavoriteMeal.class, PlannedMeal.class }, version = 1, exportSchema = false)
+@Database(entities = { FavoriteMeal.class, PlannedMeal.class, User.class }, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "food_planner_db";
@@ -18,6 +19,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract FavoriteMealDAO favoriteMealDAO();
 
     public abstract PlannedMealDAO plannedMealDAO();
+
+    public abstract UserDao userDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {

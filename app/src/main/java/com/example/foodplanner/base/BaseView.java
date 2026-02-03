@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.base;
+package com.example.foodplanner.base;
 
 public interface BaseView {
     void showLoading();

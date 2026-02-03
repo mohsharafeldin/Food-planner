@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.data.local;
+package com.example.foodplanner.data.local;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.testfoodplanner.data.model.FavoriteMeal;
+import com.example.foodplanner.data.model.FavoriteMeal;
 
 import java.util.List;
 

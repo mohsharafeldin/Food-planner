@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.base;
+package com.example.foodplanner.base;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
