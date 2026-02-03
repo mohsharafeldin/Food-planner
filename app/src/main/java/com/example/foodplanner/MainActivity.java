@@ -1,12 +1,9 @@
 package com.example.foodplanner;
 
 import android.os.Bundle;
+import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -15,24 +12,43 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private NavController navController;
+    private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0); // Bottom padding handled by BottomNav
-            return insets;
-        });
+        setupNavigation();
+    }
 
+    private void setupNavigation() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
+
         if (navHostFragment != null) {
-            NavController navController = navHostFragment.getNavController();
-            BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-            NavigationUI.setupWithNavController(bottomNav, navController);
+            navController = navHostFragment.getNavController();
+            bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+            NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+            // Hide bottom navigation on detail screens
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                int destId = destination.getId();
+                if (destId == R.id.mealDetailsFragment ||
+                        destId == R.id.categoryMealsFragment ||
+                        destId == R.id.countryMealsFragment) {
+                    bottomNavigationView.setVisibility(View.GONE);
+                } else {
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                }
+            });
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return navController.navigateUp() || super.onSupportNavigateUp();
     }
 }
