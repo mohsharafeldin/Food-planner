@@ -1,9 +1,9 @@
-package com.example.testfoodplanner.data.remote;
+package com.example.foodplanner.data.remote;
 
-import com.example.testfoodplanner.data.model.AreaResponse;
-import com.example.testfoodplanner.data.model.CategoryResponse;
-import com.example.testfoodplanner.data.model.IngredientResponse;
-import com.example.testfoodplanner.data.model.MealResponse;
+import com.example.foodplanner.data.model.AreaResponse;
+import com.example.foodplanner.data.model.CategoryResponse;
+import com.example.foodplanner.data.model.IngredientResponse;
+import com.example.foodplanner.data.model.MealResponse;
 
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.GET;

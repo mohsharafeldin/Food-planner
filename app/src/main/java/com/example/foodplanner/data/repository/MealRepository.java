@@ -1,19 +1,19 @@
-package com.example.testfoodplanner.data.repository;
+package com.example.foodplanner.data.repository;
 
 import android.content.Context;
 
-import com.example.testfoodplanner.data.local.AppDatabase;
-import com.example.testfoodplanner.data.local.FavoriteMealDAO;
-import com.example.testfoodplanner.data.local.PlannedMealDAO;
-import com.example.testfoodplanner.data.model.AreaResponse;
-import com.example.testfoodplanner.data.model.CategoryResponse;
-import com.example.testfoodplanner.data.model.FavoriteMeal;
-import com.example.testfoodplanner.data.model.IngredientResponse;
-import com.example.testfoodplanner.data.model.Meal;
-import com.example.testfoodplanner.data.model.MealResponse;
-import com.example.testfoodplanner.data.model.PlannedMeal;
-import com.example.testfoodplanner.data.remote.MealApiService;
-import com.example.testfoodplanner.data.remote.RetrofitClient;
+import com.example.foodplanner.data.local.AppDatabase;
+import com.example.foodplanner.data.local.FavoriteMealDAO;
+import com.example.foodplanner.data.local.PlannedMealDAO;
+import com.example.foodplanner.data.model.AreaResponse;
+import com.example.foodplanner.data.model.CategoryResponse;
+import com.example.foodplanner.data.model.FavoriteMeal;
+import com.example.foodplanner.data.model.IngredientResponse;
+import com.example.foodplanner.data.model.Meal;
+import com.example.foodplanner.data.model.MealResponse;
+import com.example.foodplanner.data.model.PlannedMeal;
+import com.example.foodplanner.data.remote.MealApiService;
+import com.example.foodplanner.data.remote.RetrofitClient;
 
 import java.util.List;
 

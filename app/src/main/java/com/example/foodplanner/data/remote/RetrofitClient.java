@@ -1,6 +1,6 @@
-package com.example.testfoodplanner.data.remote;
+package com.example.foodplanner.data.remote;
 
-import com.example.testfoodplanner.utils.Constants;
+import com.example.foodplanner.utils.Constants;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
