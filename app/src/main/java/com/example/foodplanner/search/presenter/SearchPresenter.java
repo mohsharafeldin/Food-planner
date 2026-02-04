@@ -1,18 +1,17 @@
-package com.example.foodplanner.search.presenter;
+package com.example.testfoodplanner.search.presenter;
 
-import com.example.foodplanner.base.BasePresenter;
-import com.example.foodplanner.data.model.Area;
-import com.example.foodplanner.data.model.Category;
-import com.example.foodplanner.data.model.Ingredient;
-import com.example.foodplanner.data.repository.MealRepository;
-import com.example.foodplanner.search.view.SearchView;
-import com.example.foodplanner.utils.Constants;
+import com.example.testfoodplanner.base.BasePresenter;
+import com.example.testfoodplanner.data.repository.MealRepository;
+import com.example.testfoodplanner.search.view.SearchView;
+import com.example.testfoodplanner.utils.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.example.testfoodplanner.data.model.Area;
+import com.example.testfoodplanner.data.model.Category;
+import com.example.testfoodplanner.data.model.Ingredient;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchPresenter extends BasePresenter<SearchView> {
 
