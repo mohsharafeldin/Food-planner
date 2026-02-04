@@ -1,9 +1,9 @@
-package com.example.testfoodplanner.favorites.presenter;
+package com.example.foodplanner.favorites.presenter;
 
-import com.example.testfoodplanner.base.BasePresenter;
-import com.example.testfoodplanner.data.model.FavoriteMeal;
-import com.example.testfoodplanner.data.repository.MealRepository;
-import com.example.testfoodplanner.favorites.view.FavoritesView;
+import com.example.foodplanner.base.BasePresenter;
+import com.example.foodplanner.data.model.FavoriteMeal;
+import com.example.foodplanner.data.repository.MealRepository;
+import com.example.foodplanner.favorites.view.FavoritesView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
