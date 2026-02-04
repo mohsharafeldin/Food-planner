@@ -147,4 +147,7 @@
 
     <!-- Firebase - This will be auto-generated, placeholder for now -->
     <string name="default_web_client_id">YOUR_WEB_CLIENT_ID</string>
+    
+    <!-- Video Error -->
+    <string name="video_error_fallback">Unable to load video. Tap to open in YouTube.</string>
 </resources>
