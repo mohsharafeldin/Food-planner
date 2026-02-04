@@ -1,155 +1,22 @@
 package com.example.foodplanner.profile.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.auth.view.AuthActivity;
-import com.example.foodplanner.data.repository.MealRepository;
-import com.example.foodplanner.profile.presenter.ProfilePresenter;
-import com.example.foodplanner.utils.SessionManager;
-import com.google.android.material.button.MaterialButton;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class ProfileFragment extends Fragment implements ProfileView {
-
-    private CircleImageView ivProfile;
-    private TextView tvUserName, tvUserEmail;
-    private CardView cardSync, cardGuestPrompt;
-    private MaterialButton btnSync, btnBackup, btnRestore, btnLogin, btnLogout;
-    private ProgressBar progressBar;
-
-    private ProfilePresenter presenter;
-    private SessionManager sessionManager;
+public class ProfileFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        initViews(view);
-        initPresenter();
-        setupUI();
-        setupListeners();
-    }
-
-    private void initViews(View view) {
-        ivProfile = view.findViewById(R.id.iv_profile);
-        tvUserName = view.findViewById(R.id.tv_user_name);
-        tvUserEmail = view.findViewById(R.id.tv_user_email);
-        cardSync = view.findViewById(R.id.card_sync);
-        cardGuestPrompt = view.findViewById(R.id.card_guest_prompt);
-        btnSync = view.findViewById(R.id.btn_sync);
-        btnBackup = view.findViewById(R.id.btn_backup);
-        btnRestore = view.findViewById(R.id.btn_restore);
-        btnLogin = view.findViewById(R.id.btn_login);
-        btnLogout = view.findViewById(R.id.btn_logout);
-        progressBar = view.findViewById(R.id.progress_bar);
-
-        sessionManager = new SessionManager(requireContext());
-    }
-
-    private void initPresenter() {
-        MealRepository repository = MealRepository.getInstance(requireContext());
-        String userId = sessionManager.getUserId();
-        presenter = new ProfilePresenter(repository, sessionManager, userId);
-        presenter.attachView(this);
-    }
-
-    private void setupUI() {
-        if (sessionManager.isGuest()) {
-            tvUserName.setText(R.string.guest_user);
-            tvUserEmail.setVisibility(View.GONE);
-            cardSync.setVisibility(View.GONE);
-            cardGuestPrompt.setVisibility(View.VISIBLE);
-        } else {
-            String userName = sessionManager.getUserName();
-            String userEmail = sessionManager.getUserEmail();
-
-            tvUserName.setText(userName != null ? userName : "User");
-            tvUserEmail.setText(userEmail != null ? userEmail : "");
-            tvUserEmail.setVisibility(View.VISIBLE);
-            cardSync.setVisibility(View.VISIBLE);
-            cardGuestPrompt.setVisibility(View.GONE);
-        }
-    }
-
-    private void setupListeners() {
-        btnSync.setOnClickListener(v -> presenter.syncData());
-        btnBackup.setOnClickListener(v -> presenter.backupData());
-        btnRestore.setOnClickListener(v -> presenter.restoreData());
-        btnLogin.setOnClickListener(v -> navigateToAuth());
-        btnLogout.setOnClickListener(v -> presenter.logout());
-    }
-
-    private void navigateToAuth() {
-        Intent intent = new Intent(requireActivity(), AuthActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        requireActivity().finish();
-    }
-
-    @Override
-    public void onBackupSuccess() {
-        Toast.makeText(requireContext(), R.string.backup_success, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRestoreSuccess() {
-        Toast.makeText(requireContext(), R.string.restore_success, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSyncSuccess() {
-        Toast.makeText(requireContext(), "Sync completed successfully!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onLogoutSuccess() {
-        navigateToAuth();
-    }
-
-    @Override
-    public void showLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideLoading() {
-        progressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showError(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showNetworkError() {
-        Toast.makeText(requireContext(), R.string.network_error, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        presenter.detachView();
     }
 }
