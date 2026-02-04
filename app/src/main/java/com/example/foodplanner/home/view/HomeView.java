@@ -1,9 +1,9 @@
-package com.example.testfoodplanner.home.view;
+package com.example.foodplanner.home.view;
 
-import com.example.testfoodplanner.base.BaseView;
-import com.example.testfoodplanner.data.model.Area;
-import com.example.testfoodplanner.data.model.Category;
-import com.example.testfoodplanner.data.model.Meal;
+import com.example.foodplanner.base.BaseView;
+import com.example.foodplanner.data.model.Area;
+import com.example.foodplanner.data.model.Category;
+import com.example.foodplanner.data.model.Meal;
 
 import java.util.List;
 

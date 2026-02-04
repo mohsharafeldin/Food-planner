@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.home.view;
+package com.example.foodplanner.home.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testfoodplanner.R;
-import com.example.testfoodplanner.data.model.Area;
+import com.example.foodplanner.R;
+import com.example.foodplanner.data.model.Area;
 
 import java.util.ArrayList;
 import java.util.List;
