@@ -1,7 +1,7 @@
-package com.example.testfoodplanner.mealdetails.view;
+package com.example.foodplanner.mealdetails.view;
 
-import com.example.testfoodplanner.base.BaseView;
-import com.example.testfoodplanner.data.model.Meal;
+import com.example.foodplanner.base.BaseView;
+import com.example.foodplanner.data.model.Meal;
 
 public interface MealDetailsView extends BaseView {
     void showMealDetails(Meal meal);

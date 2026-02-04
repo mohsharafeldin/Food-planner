@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.mealdetails.view;
+package com.example.foodplanner.mealdetails.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.testfoodplanner.R;
-import com.example.testfoodplanner.data.model.IngredientWithMeasure;
+import com.example.foodplanner.R;
+import com.example.foodplanner.data.model.IngredientWithMeasure;
 
 import java.util.ArrayList;
 import java.util.List;
