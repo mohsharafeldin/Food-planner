@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.utils;
+package com.example.foodplanner.utils;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;

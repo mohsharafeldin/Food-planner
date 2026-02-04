@@ -1,6 +1,6 @@
-package com.example.testfoodplanner.profile.view;
+package com.example.foodplanner.profile.view;
 
-import com.example.testfoodplanner.base.BaseView;
+import com.example.foodplanner.base.BaseView;
 
 public interface ProfileView extends BaseView {
     void onBackupSuccess();

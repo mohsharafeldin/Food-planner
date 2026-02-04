@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.utils;
+package com.example.foodplanner.utils;
 
 public class Constants {
     // API Base URL

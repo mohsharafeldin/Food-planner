@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.categories.view;
+package com.example.foodplanner.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,13 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testfoodplanner.R;
-import com.example.testfoodplanner.base.BasePresenter;
-import com.example.testfoodplanner.base.BaseView;
-import com.example.testfoodplanner.data.repository.MealRepository;
-import com.example.testfoodplanner.search.view.MealAdapter;
-
-import java.util.List;
+import com.example.foodplanner.R;
+import com.example.foodplanner.data.repository.MealRepository;
+import com.example.foodplanner.search.view.MealAdapter;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;

@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.utils;
+package com.example.foodplanner.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
