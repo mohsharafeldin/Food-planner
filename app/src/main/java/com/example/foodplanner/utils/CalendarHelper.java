@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.utils;
+package com.example.foodplanner.utils;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -38,15 +38,57 @@ public class CalendarHelper {
         }
     }
 
+    private static long getPrimaryCalendarId(Context context) {
+        String[] projection = new String[] {
+                CalendarContract.Calendars._ID,
+                CalendarContract.Calendars.IS_PRIMARY
+        };
+
+        // Filter for calendars that are visible and owned by an account (not local-only
+        // if possible)
+        // But simpler: just get the first one or primary
+        try (android.database.Cursor cursor = context.getContentResolver().query(
+                CalendarContract.Calendars.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null)) {
+
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    long id = cursor.getLong(0);
+                    // Check if is primary (column index 1)
+                    // Some devices/API levels might not return IS_PRIMARY reliably,
+                    // so we might just take the first one found as fallback.
+                    // 1 = true
+                    String isPrimary = cursor.getString(1);
+                    if ("1".equals(isPrimary)) {
+                        return id;
+                    }
+                }
+                // If no primary found, try resetting and taking the first one
+                if (cursor.moveToFirst()) {
+                    return cursor.getLong(0);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 1; // Fallback to 1 if query fails (risky but better than nothing)
+    }
+
     public static void addEventToCalendarProvider(Context context, String title, String description,
             long beginTimeMillis) {
+
+        long calId = getPrimaryCalendarId(context);
+
         ContentResolver cr = context.getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, beginTimeMillis);
         values.put(CalendarContract.Events.DTEND, beginTimeMillis + 60 * 60 * 1000); // 1 hour
         values.put(CalendarContract.Events.TITLE, "Meal: " + title);
         values.put(CalendarContract.Events.DESCRIPTION, description);
-        values.put(CalendarContract.Events.CALENDAR_ID, 1); // Primary calendar
+        values.put(CalendarContract.Events.CALENDAR_ID, calId);
         values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
 
         try {
@@ -57,7 +99,8 @@ public class CalendarHelper {
         } catch (SecurityException e) {
             Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(context, "Error adding to calendar", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            Toast.makeText(context, "Error adding to calendar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

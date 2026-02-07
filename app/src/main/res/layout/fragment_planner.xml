@@ -17,31 +17,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/background_dark"
             android:orientation="vertical">
 
-            <!-- Top Bar with Menu and Calendar -->
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
                 android:padding="@dimen/spacing_medium">
 
                 <ImageButton
-                    android:id="@+id/btn_menu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_circle_translucent"
-                    android:contentDescription="@string/menu"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_menu"
+                    android:id="@+id/btn_prev_week"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Previous Week"
+                    android:src="@drawable/ic_arrow_back"
                     app:tint="@color/text_primary" />
 
                 <TextView
                     android:id="@+id/tv_month_year"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_centerInParent="true"
                     android:gravity="center"
                     android:text="October 2023"
                     android:textColor="@color/text_primary"
@@ -50,16 +50,17 @@
                     tools:text="October 2023" />
 
                 <ImageButton
-                    android:id="@+id/btn_calendar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_circle_translucent"
-                    android:contentDescription="@string/calendar"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_calendar"
+                    android:id="@+id/btn_next_week"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Next Week"
+                    android:src="@drawable/ic_arrow_forward"
                     app:tint="@color/text_primary" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <!-- Horizontal Calendar Strip -->
             <HorizontalScrollView
@@ -194,17 +195,9 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_meal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
-        android:backgroundTint="@color/surface_dark"
-        android:contentDescription="@string/add_meal"
-        android:src="@drawable/ic_add"
-        app:borderWidth="1dp"
-        app:tint="@color/primary_color" />
+    <include
+        android:id="@+id/layout_guest_mode"
+        layout="@layout/layout_guest_mode"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

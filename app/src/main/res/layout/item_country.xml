@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:layout_marginEnd="12dp"
@@ -16,14 +17,12 @@
         android:orientation="vertical"
         android:padding="8dp">
 
-        <TextView
-            android:id="@+id/tv_country_flag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="1.0"
-            android:textColor="@color/white"
-            android:text="🇺🇸"
-            android:textSize="32sp" />
+        <ImageView
+            android:id="@+id/iv_country_flag"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="@string/country_flag"
+            tools:src="@drawable/ic_food_logo" />
 
         <TextView
             android:id="@+id/tv_country_name"

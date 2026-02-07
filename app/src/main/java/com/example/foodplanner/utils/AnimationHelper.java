@@ -1,11 +1,11 @@
-package com.example.testfoodplanner.utils;
+package com.example.foodplanner.utils;
 
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
-import com.example.testfoodplanner.R;
+import com.example.foodplanner.R;
 
 public class AnimationHelper {
 

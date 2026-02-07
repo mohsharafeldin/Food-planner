@@ -1,14 +1,15 @@
-package com.example.testfoodplanner.search.presenter;
+package com.example.foodplanner.search.presenter;
 
-import com.example.testfoodplanner.base.BasePresenter;
-import com.example.testfoodplanner.data.repository.MealRepository;
-import com.example.testfoodplanner.search.view.SearchView;
-import com.example.testfoodplanner.utils.Constants;
+import com.example.foodplanner.base.BasePresenter;
+import com.example.foodplanner.data.meal.repository.MealRepository;
+import com.example.foodplanner.search.view.SearchView;
+import com.example.foodplanner.utils.Constants;
 
-import com.example.testfoodplanner.data.model.Area;
-import com.example.testfoodplanner.data.model.Category;
-import com.example.testfoodplanner.data.model.Ingredient;
+import com.example.foodplanner.data.meal.model.Area;
+import com.example.foodplanner.data.meal.model.Category;
+import com.example.foodplanner.data.meal.model.Ingredient;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class SearchPresenter extends BasePresenter<SearchView> {
 
     private final MealRepository repository;
+    private Disposable searchDisposable;
 
     public SearchPresenter(MealRepository repository) {
         this.repository = repository;
@@ -33,18 +35,23 @@ public class SearchPresenter extends BasePresenter<SearchView> {
             view.showLoading();
         }
 
+        // Dispose previous search if active
+        if (searchDisposable != null && !searchDisposable.isDisposed()) {
+            searchDisposable.dispose();
+        }
+
         switch (searchType) {
             case Constants.SEARCH_BY_NAME:
-                searchByName(query);
+                searchDisposable = searchByName(query);
                 break;
             case Constants.SEARCH_BY_CATEGORY:
-                searchByCategory(query);
+                searchDisposable = searchByCategory(query);
                 break;
             case Constants.SEARCH_BY_COUNTRY:
-                searchByCountry(query);
+                searchDisposable = searchByCountry(query);
                 break;
             case Constants.SEARCH_BY_INGREDIENT:
-                searchByIngredient(query);
+                searchDisposable = searchByIngredient(query);
                 break;
         }
     }
@@ -123,79 +130,76 @@ public class SearchPresenter extends BasePresenter<SearchView> {
                                 }));
     }
 
-    private void searchByName(String query) {
+    private Disposable searchByName(String query) {
         String formattedQuery = capitalizeFirstLetter(query);
-        addDisposable(
-                repository.searchMealsByName(formattedQuery)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                response -> {
-                                    if (view != null) {
-                                        view.hideLoading();
-                                        if (response.getMeals() != null && !response.getMeals().isEmpty()) {
-                                            view.showSearchResults(response.getMeals());
-                                        } else {
-                                            view.showEmptyResults();
-                                        }
-                                    }
-                                },
-                                error -> {
-                                    if (view != null) {
-                                        view.hideLoading();
-                                        view.showError(error.getMessage());
-                                    }
-                                }));
+        return repository.searchMealsByName(formattedQuery)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (view != null) {
+                                view.hideLoading();
+                                if (response.getMeals() != null && !response.getMeals().isEmpty()) {
+                                    view.showSearchResults(response.getMeals());
+                                } else {
+                                    view.showEmptyResults();
+                                }
+                            }
+                        },
+                        error -> {
+                            if (view != null) {
+                                view.hideLoading();
+                                view.showError(error.getMessage());
+                            }
+                        });
     }
 
-    private void searchByCategory(String category) {
+    private Disposable searchByCategory(String category) {
         String formattedCategory = capitalizeFirstLetter(category);
-        addDisposable(
-                repository.filterByCategory(formattedCategory)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                response -> {
-                                    if (view != null) {
-                                        view.hideLoading();
-                                        if (response.getMeals() != null && !response.getMeals().isEmpty()) {
-                                            view.showSearchResults(response.getMeals());
-                                        } else {
-                                            view.showEmptyResults();
-                                        }
-                                    }
-                                },
-                                error -> {
-                                    if (view != null) {
-                                        view.hideLoading();
-                                        view.showError(error.getMessage());
-                                    }
-                                }));
+        return repository.filterByCategory(formattedCategory)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (view != null) {
+                                view.hideLoading();
+                                if (response.getMeals() != null && !response.getMeals().isEmpty()) {
+                                    view.showSearchResults(response.getMeals());
+                                } else {
+                                    view.showEmptyResults();
+                                }
+                            }
+                        },
+                        error -> {
+                            if (view != null) {
+                                view.hideLoading();
+                                view.showError(error.getMessage());
+                            }
+                        });
     }
 
-    private void searchByCountry(String country) {
+    private Disposable searchByCountry(String country) {
         String formattedCountry = capitalizeFirstLetter(country);
-        addDisposable(
-                repository.filterByArea(formattedCountry)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                response -> {
-                                    if (view != null) {
-                                        view.hideLoading();
-                                        if (response.getMeals() != null && !response.getMeals().isEmpty()) {
-                                            view.showSearchResults(response.getMeals());
-                                        } else {
-                                            view.showEmptyResults();
-                                        }
-                                    }
-                                },
-                                error -> {
-                                    if (view != null) {
-                                        view.hideLoading();
-                                        view.showError(error.getMessage());
-                                    }
-                                }));
+        return repository.filterByArea(formattedCountry)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (view != null) {
+                                view.hideLoading();
+                                if (response.getMeals() != null && !response.getMeals().isEmpty()) {
+                                    view.showSearchResults(response.getMeals());
+                                } else {
+                                    view.showEmptyResults();
+                                }
+                            }
+                        },
+                        error -> {
+                            if (view != null) {
+                                view.hideLoading();
+                                view.showError(error.getMessage());
+                            }
+                        });
     }
 
     private String capitalizeFirstLetter(String input) {
@@ -205,28 +209,35 @@ public class SearchPresenter extends BasePresenter<SearchView> {
         return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 
-    private void searchByIngredient(String ingredient) {
+    private Disposable searchByIngredient(String ingredient) {
         String formattedIngredient = capitalizeFirstLetter(ingredient);
-        addDisposable(
-                repository.filterByIngredient(formattedIngredient)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                response -> {
-                                    if (view != null) {
-                                        view.hideLoading();
-                                        if (response.getMeals() != null && !response.getMeals().isEmpty()) {
-                                            view.showSearchResults(response.getMeals());
-                                        } else {
-                                            view.showEmptyResults();
-                                        }
-                                    }
-                                },
-                                error -> {
-                                    if (view != null) {
-                                        view.hideLoading();
-                                        view.showError(error.getMessage());
-                                    }
-                                }));
+        return repository.filterByIngredient(formattedIngredient)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (view != null) {
+                                view.hideLoading();
+                                if (response.getMeals() != null && !response.getMeals().isEmpty()) {
+                                    view.showSearchResults(response.getMeals());
+                                } else {
+                                    view.showEmptyResults();
+                                }
+                            }
+                        },
+                        error -> {
+                            if (view != null) {
+                                view.hideLoading();
+                                view.showError(error.getMessage());
+                            }
+                        });
+    }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+        if (searchDisposable != null && !searchDisposable.isDisposed()) {
+            searchDisposable.dispose();
+        }
     }
 }

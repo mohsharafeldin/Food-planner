@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_dark"
+        android:backgroundTint="@color/background_dark"
         app:elevation="0dp">
 
         <LinearLayout
@@ -57,15 +58,7 @@
 
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/btn_profile"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/bg_circle_translucent"
-                android:contentDescription="@string/profile"
-                android:padding="10dp"
-                android:src="@drawable/ic_person"
-                app:tint="@color/text_primary" />
+
 
         </LinearLayout>
 

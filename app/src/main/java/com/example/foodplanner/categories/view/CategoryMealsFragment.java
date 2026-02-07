@@ -4,26 +4,129 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.data.meal.repository.MealRepository;
+import com.example.foodplanner.search.view.MealAdapter;
 
-public class CategoryMealsFragment extends Fragment {
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class CategoryMealsFragment extends Fragment implements MealAdapter.OnMealClickListener {
+
+    private Toolbar toolbar;
+    private RecyclerView rvMeals;
+    private ProgressBar progressBar;
+    private LinearLayout layoutEmpty;
+
+    private MealAdapter mealAdapter;
+    private MealRepository repository;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        // Since fragment_category_meals might not exist or be named differently,
-        // I'll check the layout name from the nav graph if needed.
-        // Based on main_nav_graph.xml, it's fragment_category_meals.
         return inflater.inflate(R.layout.fragment_category_meals, container, false);
-        // Actually, let me check the layouts again. fragment_category_meals.xml was NOT
-        // in the list.
-        // Wait, I saw item_meal_section, etc. Let me list layout directory again to be
-        // sure.
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initViews(view);
+        setupAdapter();
+        loadMeals();
+    }
+
+    private void initViews(View view) {
+        toolbar = view.findViewById(R.id.toolbar);
+        rvMeals = view.findViewById(R.id.rv_meals);
+        progressBar = view.findViewById(R.id.progress_bar);
+        layoutEmpty = view.findViewById(R.id.layout_empty);
+
+        repository = MealRepository.getInstance(requireContext());
+
+        toolbar.setNavigationOnClickListener(v -> Navigation.findNavController(requireView()).navigateUp());
+
+        Bundle args = getArguments();
+        if (args != null) {
+            String categoryName = args.getString("categoryName");
+            toolbar.setTitle(categoryName);
+        }
+    }
+
+    private void setupAdapter() {
+        mealAdapter = new MealAdapter(requireContext(), this);
+        rvMeals.setAdapter(mealAdapter);
+    }
+
+    private void loadMeals() {
+        Bundle args = getArguments();
+        if (args == null)
+            return;
+
+        String categoryName = args.getString("categoryName");
+        if (categoryName == null)
+            return;
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        disposables.add(
+                repository.filterByCategory(categoryName)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                response -> {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (response.getMeals() != null && !response.getMeals().isEmpty()) {
+                                        layoutEmpty.setVisibility(View.GONE);
+                                        rvMeals.setVisibility(View.VISIBLE);
+                                        mealAdapter.setMeals(response.getMeals());
+                                    } else {
+                                        rvMeals.setVisibility(View.GONE);
+                                        layoutEmpty.setVisibility(View.VISIBLE);
+                                    }
+                                },
+                                error -> {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (getContext() != null) {
+                                        Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }));
+    }
+
+    @Override
+    public void onMealClick(String mealId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("mealId", mealId);
+        Navigation.findNavController(requireView())
+                .navigate(R.id.action_categoryMeals_to_mealDetails, bundle);
+    }
+
+    @Override
+    public void onFavoriteClick(String mealId) {
+        // Navigate to meal details where user can properly add to favorites
+        Bundle bundle = new Bundle();
+        bundle.putString("mealId", mealId);
+        Navigation.findNavController(requireView())
+                .navigate(R.id.action_categoryMeals_to_mealDetails, bundle);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        disposables.clear();
     }
 }

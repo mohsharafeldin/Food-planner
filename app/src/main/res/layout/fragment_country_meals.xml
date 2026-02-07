@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/background_dark"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:navigationIconTint="@color/text_primary"
+        app:navigationIcon="@drawable/ic_back_circle"
         app:titleTextColor="@color/text_primary" />
 
     <!-- Content -->

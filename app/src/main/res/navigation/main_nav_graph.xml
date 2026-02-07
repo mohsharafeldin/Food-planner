@@ -35,6 +35,8 @@
             app:destination="@id/mealDetailsFragment" />
     </fragment>
 
+    <include app:graph="@navigation/auth_nav_graph" />
+
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.foodplanner.favorites.view.FavoritesFragment"
@@ -44,6 +46,12 @@
         <action
             android:id="@+id/action_favorites_to_mealDetails"
             app:destination="@id/mealDetailsFragment" />
+            
+        <action
+            android:id="@+id/action_favorites_to_auth"
+            app:destination="@id/auth_nav_graph"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -55,6 +63,16 @@
         <action
             android:id="@+id/action_planner_to_mealDetails"
             app:destination="@id/mealDetailsFragment" />
+        
+        <action
+            android:id="@+id/action_planner_to_search"
+            app:destination="@id/searchFragment" />
+            
+        <action
+            android:id="@+id/action_planner_to_auth"
+            app:destination="@id/auth_nav_graph"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment

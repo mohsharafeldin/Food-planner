@@ -38,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
                 int destId = destination.getId();
                 if (destId == R.id.mealDetailsFragment ||
                         destId == R.id.categoryMealsFragment ||
-                        destId == R.id.countryMealsFragment) {
+                        destId == R.id.countryMealsFragment ||
+                        destId == R.id.loginFragment ||
+                        destId == R.id.signUpFragment) {
                     bottomNavigationView.setVisibility(View.GONE);
                 } else {
                     bottomNavigationView.setVisibility(View.VISIBLE);

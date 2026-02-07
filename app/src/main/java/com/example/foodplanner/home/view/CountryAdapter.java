@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.model.Area;
+import com.example.foodplanner.data.meal.model.Area;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,108 +55,30 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
     class CountryViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView tvCountryFlag;
+        private final android.widget.ImageView ivCountryFlag;
         private final TextView tvCountryName;
 
         CountryViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvCountryFlag = itemView.findViewById(R.id.tv_country_flag);
+            ivCountryFlag = itemView.findViewById(R.id.iv_country_flag);
             tvCountryName = itemView.findViewById(R.id.tv_country_name);
         }
 
         void bind(Area country) {
             tvCountryName.setText(country.getStrArea());
-            tvCountryFlag.setText(getFlagEmoji(country.getStrArea()));
+
+            com.bumptech.glide.Glide.with(context)
+                    .load(country.getFlagUrl())
+                    .apply(new com.bumptech.glide.request.RequestOptions()
+                            .placeholder(R.drawable.ic_food_logo)
+                            .error(R.drawable.ic_food_logo))
+                    .into(ivCountryFlag);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onCountryClick(country);
                 }
             });
-        }
-
-        private String getFlagEmoji(String countryName) {
-            switch (countryName) {
-                case "Algerian":
-                    return "🇩🇿";
-                case "American":
-                    return "🇺🇸";
-                case "Argentinian":
-                    return "🇦🇷";
-                case "Australian":
-                    return "🇦🇺";
-                case "British":
-                    return "🇬🇧";
-                case "Canadian":
-                    return "🇨🇦";
-                case "Chinese":
-                    return "🇨🇳";
-                case "Croatian":
-                    return "🇭🇷";
-                case "Dutch":
-                    return "🇳🇱";
-                case "Egyptian":
-                    return "🇪🇬";
-                case "Filipino":
-                    return "🇵🇭";
-                case "French":
-                    return "🇫🇷";
-                case "Greek":
-                    return "🇬🇷";
-                case "Indian":
-                    return "🇮🇳";
-                case "Irish":
-                    return "🇮🇪";
-                case "Italian":
-                    return "🇮🇹";
-                case "Jamaican":
-                    return "🇯🇲";
-                case "Japanese":
-                    return "🇯🇵";
-                case "Kenyan":
-                    return "🇰🇪";
-                case "Malaysian":
-                    return "🇲🇾";
-                case "Mexican":
-                    return "🇲🇽";
-                case "Moroccan":
-                    return "🇲🇦";
-                case "Norwegian":
-                    return "🇳🇴";
-                case "Polish":
-                    return "🇵🇱";
-                case "Portuguese":
-                    return "🇵🇹";
-                case "Russian":
-                    return "🇷🇺";
-                case "Saudi Arabian":
-                    return "🇸🇦";
-                case "Slovakian":
-                    return "🇸🇰";
-                case "Spanish":
-                    return "🇪🇸";
-                case "Syrian":
-                    return "🇸🇾";
-                case "Thai":
-                    return "🇹🇭";
-                case "Tunisian":
-                    return "🇹🇳";
-                case "Turkish":
-                    return "🇹🇷";
-                case "Ukrainian":
-                    return "🇺🇦";
-                case "Uruguayan":
-                    return "🇺🇾";
-                case "Venezuelan":
-                case "Venezuela":
-                case "Venezulan": // Typo in API
-                    return "🇻🇪";
-                case "Vietnamese":
-                    return "🇻🇳";
-                default:
-                    android.util.Log.d("FlagDebug", "Unknown country: " + countryName);
-                    return "🍽️";
-            }
         }
     }
 }

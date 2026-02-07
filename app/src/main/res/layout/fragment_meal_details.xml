@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:text="To Calendar"
+                    android:text="Add to Calendar"
                     android:textColor="@color/primary_color"
                     app:icon="@drawable/ic_calendar"
                     app:iconTint="@color/primary_color"

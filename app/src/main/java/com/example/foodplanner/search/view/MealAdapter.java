@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.search.view;
+package com.example.foodplanner.search.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.testfoodplanner.R;
-import com.example.testfoodplanner.data.model.Meal;
+import com.example.foodplanner.R;
+import com.example.foodplanner.data.meal.model.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,11 +77,18 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         void bind(Meal meal) {
             tvMealName.setText(meal.getStrMeal());
 
-            if (meal.getStrCategory() != null && meal.getStrArea() != null) {
-                tvMealCategory.setText(meal.getStrCategory() + " • " + meal.getStrArea());
-                tvMealCategory.setVisibility(View.VISIBLE);
-            } else if (meal.getStrCategory() != null) {
-                tvMealCategory.setText(meal.getStrCategory());
+            StringBuilder categoryText = new StringBuilder();
+            if (meal.getStrCategory() != null) {
+                categoryText.append(meal.getStrCategory());
+            }
+            if (meal.getStrArea() != null) {
+                if (categoryText.length() > 0)
+                    categoryText.append(" • ");
+                categoryText.append(meal.getStrArea());
+            }
+
+            if (categoryText.length() > 0) {
+                tvMealCategory.setText(categoryText.toString());
                 tvMealCategory.setVisibility(View.VISIBLE);
             } else {
                 tvMealCategory.setVisibility(View.GONE);
@@ -90,7 +97,6 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
             Glide.with(context)
                     .load(meal.getStrMealThumb())
                     .apply(new RequestOptions()
-                            .override(500, 500)
                             .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
                             .placeholder(R.drawable.ic_food_logo)
                             .error(R.drawable.ic_food_logo))

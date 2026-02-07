@@ -1,17 +1,15 @@
-package com.example.testfoodplanner.profile.presenter;
+package com.example.foodplanner.profile.presenter;
 
-import com.example.testfoodplanner.base.BasePresenter;
-import com.example.testfoodplanner.data.model.FavoriteMeal;
-import com.example.testfoodplanner.data.model.PlannedMeal;
-import com.example.testfoodplanner.data.repository.MealRepository;
-import com.example.testfoodplanner.profile.view.ProfileView;
-import com.example.testfoodplanner.utils.SessionManager;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.foodplanner.base.BasePresenter;
+import com.example.foodplanner.data.auth.firebase.FirebaseAuthHelper;
+import com.example.foodplanner.data.auth.firebase.FirebaseSyncHelper;
+import com.example.foodplanner.data.meal.model.FavoriteMeal;
+import com.example.foodplanner.data.meal.model.PlannedMeal;
+import com.example.foodplanner.data.meal.repository.MealRepository;
+import com.example.foodplanner.profile.view.ProfileView;
+import com.example.foodplanner.utils.SessionManager;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -19,19 +17,33 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class ProfilePresenter extends BasePresenter<ProfileView> {
 
     private final MealRepository repository;
+    private final FirebaseAuthHelper authHelper;
+    private final FirebaseSyncHelper syncHelper;
     private final SessionManager sessionManager;
-    private final FirebaseFirestore firestore;
     private final String userId;
 
     public ProfilePresenter(MealRepository repository, SessionManager sessionManager, String userId) {
         this.repository = repository;
         this.sessionManager = sessionManager;
         this.userId = userId;
-        this.firestore = FirebaseFirestore.getInstance();
+        this.authHelper = FirebaseAuthHelper.getInstance();
+        this.syncHelper = FirebaseSyncHelper.getInstance();
     }
 
+    /**
+     * Get the Firebase UID for sync operations
+     */
+    private String getFirebaseUid() {
+        String firebaseUid = sessionManager.getFirebaseUid();
+        return (firebaseUid != null && !firebaseUid.isEmpty()) ? firebaseUid : userId;
+    }
+
+    /**
+     * Backup local data to Firebase Firestore
+     */
     public void backupData() {
-        if (userId == null) {
+        String firebaseUid = getFirebaseUid();
+        if (firebaseUid == null || firebaseUid.isEmpty()) {
             if (view != null) {
                 view.showError("Please login to backup data");
             }
@@ -42,44 +54,82 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             view.showLoading();
         }
 
-        // First get all favorites
+        // Get all favorites from local Room database
         addDisposable(
                 repository.getAllFavorites(userId)
+                        .firstOrError()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                favorites -> backupFavorites(favorites),
+                                favorites -> backupFavoritesToFirestore(firebaseUid, favorites),
                                 error -> {
                                     if (view != null) {
                                         view.hideLoading();
-                                        view.showError(error.getMessage());
+                                        view.showError("Backup failed: " + error.getMessage());
                                     }
                                 }));
     }
 
-    private void backupFavorites(List<FavoriteMeal> favorites) {
-        Map<String, Object> userData = new HashMap<>();
-        userData.put("favorites", favorites);
-
-        firestore.collection("users")
-                .document(userId)
-                .set(userData)
-                .addOnSuccessListener(aVoid -> {
-                    if (view != null) {
-                        view.hideLoading();
-                        view.onBackupSuccess();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    if (view != null) {
-                        view.hideLoading();
-                        view.showError(e.getMessage());
-                    }
-                });
+    private void backupFavoritesToFirestore(String firebaseUid, List<FavoriteMeal> favorites) {
+        addDisposable(
+                syncHelper.backupFavorites(firebaseUid, favorites)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    // Now backup planned meals
+                                    backupPlannedMealsFromLocal(firebaseUid);
+                                },
+                                error -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError("Backup failed: " + error.getMessage());
+                                    }
+                                }));
     }
 
+    private void backupPlannedMealsFromLocal(String firebaseUid) {
+        addDisposable(
+                repository.getAllPlannedMeals(userId)
+                        .firstOrError()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                plannedMeals -> backupPlannedMealsToFirestore(firebaseUid, plannedMeals),
+                                error -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError("Backup failed: " + error.getMessage());
+                                    }
+                                }));
+    }
+
+    private void backupPlannedMealsToFirestore(String firebaseUid, List<PlannedMeal> plannedMeals) {
+        addDisposable(
+                syncHelper.backupPlannedMeals(firebaseUid, plannedMeals)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.onBackupSuccess();
+                                    }
+                                },
+                                error -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError("Backup failed: " + error.getMessage());
+                                    }
+                                }));
+    }
+
+    /**
+     * Restore data from Firebase Firestore to local Room database
+     */
     public void restoreData() {
-        if (userId == null) {
+        String firebaseUid = getFirebaseUid();
+        if (firebaseUid == null || firebaseUid.isEmpty()) {
             if (view != null) {
                 view.showError("Please login to restore data");
             }
@@ -90,57 +140,77 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             view.showLoading();
         }
 
-        firestore.collection("users")
-                .document(userId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        List<Map<String, Object>> favoritesData = (List<Map<String, Object>>) documentSnapshot
-                                .get("favorites");
-
-                        if (favoritesData != null) {
-                            for (Map<String, Object> data : favoritesData) {
-                                FavoriteMeal favorite = new FavoriteMeal();
-                                favorite.setIdMeal((String) data.get("idMeal"));
-                                favorite.setStrMeal((String) data.get("strMeal"));
-                                favorite.setStrMealThumb((String) data.get("strMealThumb"));
-                                favorite.setStrCategory((String) data.get("strCategory"));
-                                favorite.setStrArea((String) data.get("strArea"));
-                                favorite.setUserId(userId);
-
-                                addDisposable(
-                                        repository.addFavoriteDirectly(favorite)
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(
-                                                        () -> {
-                                                        },
-                                                        error -> {
-                                                        }));
-                            }
-                        }
-
-                        if (view != null) {
-                            view.hideLoading();
-                            view.onRestoreSuccess();
-                        }
-                    } else {
-                        if (view != null) {
-                            view.hideLoading();
-                            view.showError("No backup found");
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    if (view != null) {
-                        view.hideLoading();
-                        view.showError(e.getMessage());
-                    }
-                });
+        // Restore favorites from Firestore
+        addDisposable(
+                syncHelper.restoreFavorites(firebaseUid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                this::saveFavoritesToLocal,
+                                error -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError("Restore failed: " + error.getMessage());
+                                    }
+                                }));
     }
 
+    private void saveFavoritesToLocal(List<FavoriteMeal> favorites) {
+        // Save each favorite to local Room database
+        for (FavoriteMeal meal : favorites) {
+            meal.setUserId(userId);
+            addDisposable(
+                    repository.addFavorite(meal)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(() -> {
+                            }, error -> {
+                            }));
+        }
+
+        // Now restore planned meals
+        restorePlannedMealsFromFirestore();
+    }
+
+    private void restorePlannedMealsFromFirestore() {
+        String firebaseUid = getFirebaseUid();
+        addDisposable(
+                syncHelper.restorePlannedMeals(firebaseUid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                this::savePlannedMealsToLocal,
+                                error -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError("Restore failed: " + error.getMessage());
+                                    }
+                                }));
+    }
+
+    private void savePlannedMealsToLocal(List<PlannedMeal> plannedMeals) {
+        // Save each planned meal to local Room database
+        for (PlannedMeal meal : plannedMeals) {
+            meal.setUserId(userId);
+            addDisposable(
+                    repository.insertPlannedMealDirectly(meal)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(() -> {
+                            }, error -> {
+                            }));
+        }
+
+        if (view != null) {
+            view.hideLoading();
+            view.onRestoreSuccess();
+        }
+    }
+
+    /**
+     * Sync local data with Firestore (backup then restore)
+     */
     public void syncData() {
-        if (userId == null) {
+        String firebaseUid = getFirebaseUid();
+        if (firebaseUid == null || firebaseUid.isEmpty()) {
             if (view != null)
                 view.showError("Please login to sync data");
             return;
@@ -149,104 +219,38 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         if (view != null)
             view.showLoading();
 
-        // 1. Pull from Cloud (Restore)
-        firestore.collection("users").document(userId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        List<Map<String, Object>> favoritesData = (List<Map<String, Object>>) documentSnapshot
-                                .get("favorites");
-                        if (favoritesData != null) {
-                            // Convert Map to objects logic here or generic?
-                            // Simpler to just proceed to 2 if empty, or process if not.
-                            // For simplicity, let's just trigger backup (Push) if nothing to restore,
-                            // OR process restore then backup.
-
-                            // To properly sync, we should insert cloud items to local first.
-                            // Since we don't have a direct "Map list to List<FavoriteMeal>" helper visible,
-                            // I'll stick to the existing loop pattern but chained.
-                            processSyncRestore(favoritesData);
-                        } else {
-                            // Nothing to restore, just backup
-                            performFullBackup();
-                        }
-                    } else {
-                        // No cloud data, just backup
-                        performFullBackup();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    if (view != null) {
-                        view.hideLoading();
-                        view.showError("Sync failed: " + e.getMessage());
-                    }
-                });
-    }
-
-    private void processSyncRestore(List<Map<String, Object>> favoritesData) {
-        // Quick & Dirty: Loop insert (since we know it uses OnConflictStrategy.REPLACE)
-        // Ideally use insertAll, but need to map manualy.
-        // I will use RxJava concat/merge to wait for all inserts.
-
-        io.reactivex.rxjava3.core.Observable.fromIterable(favoritesData)
-                .map(data -> {
-                    FavoriteMeal favorite = new FavoriteMeal();
-                    favorite.setIdMeal((String) data.get("idMeal"));
-                    favorite.setStrMeal((String) data.get("strMeal"));
-                    favorite.setStrMealThumb((String) data.get("strMealThumb"));
-                    favorite.setStrCategory((String) data.get("strCategory"));
-                    favorite.setStrArea((String) data.get("strArea"));
-                    favorite.setUserId(userId);
-                    return favorite;
-                })
-                .flatMapCompletable(meal -> repository.addFavoriteDirectly(meal).subscribeOn(Schedulers.io()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> performFullBackup(), // 2. Push to Cloud (Backup)
-                        error -> {
-                            if (view != null) {
-                                view.hideLoading();
-                                view.showError("Sync Restore failed: " + error.getMessage());
-                            }
-                        });
-    }
-
-    private void performFullBackup() {
-        // Fetch all local and push to cloud
-        addDisposable(repository.getAllFavorites(userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        favorites -> {
-                            Map<String, Object> userData = new HashMap<>();
-                            userData.put("favorites", favorites);
-
-                            firestore.collection("users").document(userId).set(userData)
-                                    .addOnSuccessListener(aVoid -> {
-                                        if (view != null) {
-                                            view.hideLoading();
-                                            if (view instanceof ProfileView) {
-                                                ((ProfileView) view).onSyncSuccess();
-                                            }
+        // First backup local to Firestore, then restore Firestore to local
+        addDisposable(
+                repository.getAllFavorites(userId)
+                        .firstOrError()
+                        .subscribeOn(Schedulers.io())
+                        .flatMapCompletable(favorites -> syncHelper.backupFavorites(firebaseUid, favorites))
+                        .andThen(repository.getAllPlannedMeals(userId).firstOrError())
+                        .flatMapCompletable(meals -> syncHelper.backupPlannedMeals(firebaseUid, meals))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        if (view instanceof ProfileView) {
+                                            ((ProfileView) view).onSyncSuccess();
                                         }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        if (view != null) {
-                                            view.hideLoading();
-                                            view.showError("Sync Backup failed: " + e.getMessage());
-                                        }
-                                    });
-                        },
-                        error -> {
-                            if (view != null) {
-                                view.hideLoading();
-                                view.showError("Sync Local Read failed: " + error.getMessage());
-                            }
-                        }));
+                                    }
+                                },
+                                error -> {
+                                    if (view != null) {
+                                        view.hideLoading();
+                                        view.showError("Sync failed: " + error.getMessage());
+                                    }
+                                }));
     }
 
     public void logout() {
-        FirebaseAuth.getInstance().signOut();
+        // Sign out from Firebase
+        authHelper.signOut();
+        // Clear local session
         sessionManager.logout();
+
         if (view != null) {
             view.onLogoutSuccess();
         }

@@ -2,7 +2,7 @@ package com.example.foodplanner;
 
 import android.app.Application;
 
-import com.example.foodplanner.data.local.MealDatabase;
+import com.example.foodplanner.data.meal.local.MealDatabase;
 
 public class FoodPlannerApplication extends Application {
 

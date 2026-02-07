@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
+
 }
 
 android {
@@ -71,4 +73,16 @@ dependencies {
     
     // YouTube Player
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
+    
+    // Firebase
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.auth
+    implementation libs.firebase.firestore
+    implementation platform('com.google.firebase:firebase-bom:34.9.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    
+    // Google Sign-In (Credential Manager)
+    implementation libs.credentials
+    implementation libs.credentials.play.services.auth
+    implementation libs.googleid
 }

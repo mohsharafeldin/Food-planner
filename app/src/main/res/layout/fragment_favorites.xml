@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_dark"
+        android:backgroundTint="@color/background_dark"
         app:elevation="0dp">
 
         <!-- Header with Title and Search -->
@@ -38,6 +39,25 @@
                     android:textSize="28sp"
                     android:textStyle="bold"
                     android:letterSpacing="-0.02" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_search_favorites"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_search_bar"
+                    android:hint="@string/find_meals"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
                <ImageButton
                     android:id="@+id/btn_search"
@@ -155,5 +175,10 @@
         </FrameLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/layout_guest_mode"
+        layout="@layout/layout_guest_mode"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

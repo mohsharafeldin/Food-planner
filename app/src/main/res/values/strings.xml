@@ -102,6 +102,7 @@
 
     <!-- Content Descriptions -->
     <string name="meal_image">Meal image</string>
+    <string name="country_flag">Country flag</string>
     <string name="category_image">Category image</string>
     <string name="rating">Rating</string>
     <string name="cooking_time">Cooking time</string>

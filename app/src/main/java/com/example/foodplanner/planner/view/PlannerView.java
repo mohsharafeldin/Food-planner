@@ -1,7 +1,7 @@
-package com.example.testfoodplanner.planner.view;
+package com.example.foodplanner.planner.view;
 
-import com.example.testfoodplanner.base.BaseView;
-import com.example.testfoodplanner.data.model.PlannedMeal;
+import com.example.foodplanner.base.BaseView;
+import com.example.foodplanner.data.meal.model.PlannedMeal;
 
 import java.util.List;
 

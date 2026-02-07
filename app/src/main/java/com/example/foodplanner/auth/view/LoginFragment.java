@@ -23,7 +23,7 @@ import com.google.android.material.textfield.TextInputEditText;
 public class LoginFragment extends Fragment implements AuthView {
 
     private TextInputEditText etEmail, etPassword;
-    private MaterialButton btnLogin, btnGuest;
+    private MaterialButton btnLogin, btnGuest, btnGoogleSignIn;
     private ProgressBar progressBar;
     private TextView tvSignUp;
 
@@ -42,6 +42,13 @@ public class LoginFragment extends Fragment implements AuthView {
 
         initViews(view);
         initPresenter();
+
+        // Check if already logged in (auto-login)
+        if (presenter.isLoggedIn()) {
+            navigateToMain();
+            return;
+        }
+
         setupListeners();
     }
 
@@ -50,6 +57,7 @@ public class LoginFragment extends Fragment implements AuthView {
         etPassword = view.findViewById(R.id.et_password);
         btnLogin = view.findViewById(R.id.btn_login);
         btnGuest = view.findViewById(R.id.btn_guest);
+        btnGoogleSignIn = view.findViewById(R.id.btn_google_signin);
         progressBar = view.findViewById(R.id.progress_bar);
         tvSignUp = view.findViewById(R.id.tv_sign_up);
     }
@@ -69,6 +77,13 @@ public class LoginFragment extends Fragment implements AuthView {
         btnGuest.setOnClickListener(v -> presenter.continueAsGuest());
 
         tvSignUp.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_login_to_signup));
+
+        // Google Sign-In button
+        if (btnGoogleSignIn != null) {
+            btnGoogleSignIn.setOnClickListener(v -> {
+                presenter.signInWithGoogle(requireActivity());
+            });
+        }
     }
 
     @Override
@@ -76,6 +91,8 @@ public class LoginFragment extends Fragment implements AuthView {
         progressBar.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
         btnGuest.setEnabled(false);
+        if (btnGoogleSignIn != null)
+            btnGoogleSignIn.setEnabled(false);
     }
 
     @Override
@@ -83,6 +100,8 @@ public class LoginFragment extends Fragment implements AuthView {
         progressBar.setVisibility(View.GONE);
         btnLogin.setEnabled(true);
         btnGuest.setEnabled(true);
+        if (btnGoogleSignIn != null)
+            btnGoogleSignIn.setEnabled(true);
     }
 
     @Override
@@ -97,7 +116,9 @@ public class LoginFragment extends Fragment implements AuthView {
 
     @Override
     public void onError(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+        if (isAdded() && getContext() != null) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

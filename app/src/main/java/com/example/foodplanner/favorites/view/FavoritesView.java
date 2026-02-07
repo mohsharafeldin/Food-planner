@@ -1,7 +1,7 @@
 package com.example.foodplanner.favorites.view;
 
 import com.example.foodplanner.base.BaseView;
-import com.example.foodplanner.data.model.FavoriteMeal;
+import com.example.foodplanner.data.meal.model.FavoriteMeal;
 
 import java.util.List;
 

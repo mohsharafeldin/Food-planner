@@ -1,8 +1,8 @@
 package com.example.foodplanner.mealdetails.presenter;
 
 import com.example.foodplanner.base.BasePresenter;
-import com.example.foodplanner.data.model.Meal;
-import com.example.foodplanner.data.repository.MealRepository;
+import com.example.foodplanner.data.meal.model.Meal;
+import com.example.foodplanner.data.meal.repository.MealRepository;
 import com.example.foodplanner.mealdetails.view.MealDetailsView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -101,7 +101,7 @@ public class MealDetailsPresenter extends BasePresenter<MealDetailsView> {
 
     private void removeFavorite() {
         addDisposable(
-                repository.removeFavoriteById(currentMeal.getIdMeal())
+                repository.removeFavoriteById(currentMeal.getIdMeal(), userId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -118,9 +118,23 @@ public class MealDetailsPresenter extends BasePresenter<MealDetailsView> {
     }
 
     public void addToPlan(String date, String mealType) {
-        if (currentMeal == null || userId == null) {
+        if (userId == null) {
             if (view != null) {
                 view.showError("Please login to add to plan");
+            }
+            return;
+        }
+
+        if (currentMeal == null) {
+            if (view != null) {
+                view.showError("Meal data is still loading...");
+            }
+            return;
+        }
+
+        if (!isValidCategory(mealType, currentMeal.getStrCategory())) {
+            if (view != null) {
+                view.showError("Cannot add " + currentMeal.getStrCategory() + " to " + mealType);
             }
             return;
         }
@@ -140,6 +154,47 @@ public class MealDetailsPresenter extends BasePresenter<MealDetailsView> {
                                         view.showError(error.getMessage());
                                     }
                                 }));
+    }
+
+    private boolean isValidCategory(String mealType, String category) {
+        if (category == null)
+            return true;
+
+        switch (mealType) {
+            case "Breakfast":
+                return category.equalsIgnoreCase("Breakfast");
+            case "Lunch":
+            case "Dinner":
+                return isMainCourse(category);
+            case "Dessert":
+                return isDessert(category);
+            default:
+                return true;
+        }
+    }
+
+    private boolean isMainCourse(String category) {
+        String[] mains = { "Beef", "Chicken", "Lamb", "Pasta", "Pork", "Seafood", "Vegan", "Vegetarian", "Goat",
+                "Miscellaneous", "Side", "Starter" };
+        for (String type : mains) {
+            if (type.equalsIgnoreCase(category))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isDessert(String category) {
+        String[] snacks = { "Dessert", "Side", "Starter", "Miscellaneous", "Breakfast" };
+        // Note: Some users might eat breakfast items as snacks, but strictly:
+        // Let's stick to Dessert, Side, Starter.
+        // User asked for logic to prevent inappropriate.
+        // I will include Dessert, Side, Starter.
+        String[] validSnacks = { "Dessert", "Side", "Starter", "Miscellaneous" };
+        for (String type : validSnacks) {
+            if (type.equalsIgnoreCase(category))
+                return true;
+        }
+        return false;
     }
 
     public Meal getCurrentMeal() {

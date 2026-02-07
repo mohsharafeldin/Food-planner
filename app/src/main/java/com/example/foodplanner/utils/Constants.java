@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.utils;
+package com.example.foodplanner.utils;
 
 public class Constants {
     // API Base URL
@@ -29,6 +29,7 @@ public class Constants {
     public static final String MEAL_TYPE_BREAKFAST = "Breakfast";
     public static final String MEAL_TYPE_LUNCH = "Lunch";
     public static final String MEAL_TYPE_DINNER = "Dinner";
+    public static final String MEAL_TYPE_SNACKS = "Dessert";
 
     // Search Types
     public static final String SEARCH_BY_NAME = "name";

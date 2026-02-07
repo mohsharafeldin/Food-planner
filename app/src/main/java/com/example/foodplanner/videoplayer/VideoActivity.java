@@ -1,4 +1,4 @@
-package com.example.testfoodplanner.videoplayer;
+package com.example.foodplanner.videoplayer;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.media3.common.Player;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 
-import com.example.testfoodplanner.R;
+import com.example.foodplanner.R;
 
 public class VideoActivity extends AppCompatActivity {
 

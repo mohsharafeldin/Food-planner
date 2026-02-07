@@ -11,7 +11,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_dark_translucent"
+        android:background="@color/background_dark"
+        android:backgroundTint="@color/background_dark"
         app:elevation="0dp">
 
         <LinearLayout
@@ -41,15 +42,7 @@
                     android:textSize="28sp"
                     android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/btn_notifications"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_circle_translucent"
-                    android:contentDescription="@string/notifications"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_bell"
-                    app:tint="@color/text_primary" />
+
 
             </LinearLayout>
 

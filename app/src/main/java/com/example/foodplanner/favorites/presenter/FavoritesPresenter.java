@@ -1,8 +1,8 @@
 package com.example.foodplanner.favorites.presenter;
 
 import com.example.foodplanner.base.BasePresenter;
-import com.example.foodplanner.data.model.FavoriteMeal;
-import com.example.foodplanner.data.repository.MealRepository;
+import com.example.foodplanner.data.meal.model.FavoriteMeal;
+import com.example.foodplanner.data.meal.repository.MealRepository;
 import com.example.foodplanner.favorites.view.FavoritesView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -17,6 +17,8 @@ public class FavoritesPresenter extends BasePresenter<FavoritesView> {
         this.repository = repository;
         this.userId = userId;
     }
+
+    private java.util.List<FavoriteMeal> allFavorites;
 
     public void loadFavorites() {
         if (userId == null) {
@@ -39,8 +41,10 @@ public class FavoritesPresenter extends BasePresenter<FavoritesView> {
                                     if (view != null) {
                                         view.hideLoading();
                                         if (favorites != null && !favorites.isEmpty()) {
+                                            allFavorites = favorites;
                                             view.showFavorites(favorites);
                                         } else {
+                                            allFavorites = new java.util.ArrayList<>();
                                             view.showEmptyFavorites();
                                         }
                                     }
@@ -53,6 +57,37 @@ public class FavoritesPresenter extends BasePresenter<FavoritesView> {
                                 }));
     }
 
+    public void search(String query) {
+        if (allFavorites == null || allFavorites.isEmpty()) {
+            return;
+        }
+
+        if (query == null || query.trim().isEmpty()) {
+            if (view != null) {
+                view.showFavorites(allFavorites);
+            }
+            return;
+        }
+
+        java.util.List<FavoriteMeal> filteredList = new java.util.ArrayList<>();
+        String lowerQuery = query.toLowerCase().trim();
+
+        for (FavoriteMeal meal : allFavorites) {
+            if (meal.getStrMeal() != null && meal.getStrMeal().toLowerCase().contains(lowerQuery)) {
+                filteredList.add(meal);
+            }
+        }
+
+        if (view != null) {
+            if (filteredList.isEmpty()) {
+                // Optionally show a specific "no match" state, or just empty
+                view.showFavorites(filteredList); // Adapter handles empty list or we can show empty state
+            } else {
+                view.showFavorites(filteredList);
+            }
+        }
+    }
+
     public void removeFavorite(FavoriteMeal favorite) {
         addDisposable(
                 repository.removeFavorite(favorite)
@@ -62,6 +97,10 @@ public class FavoritesPresenter extends BasePresenter<FavoritesView> {
                                 () -> {
                                     if (view != null) {
                                         view.onFavoriteRemoved();
+                                        // Update local list
+                                        if (allFavorites != null) {
+                                            allFavorites.remove(favorite);
+                                        }
                                         loadFavorites();
                                     }
                                 },

@@ -35,8 +35,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.model.Meal;
-import com.example.foodplanner.data.repository.MealRepository;
+import com.example.foodplanner.data.meal.model.Meal;
+import com.example.foodplanner.data.meal.repository.MealRepository;
 import com.example.foodplanner.mealdetails.presenter.MealDetailsPresenter;
 import com.example.foodplanner.utils.Constants;
 import com.example.foodplanner.utils.SessionManager;
@@ -88,6 +88,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         return inflater.inflate(R.layout.fragment_meal_details, container, false);
     }
 
+    private String plannedDate;
+    private String plannedMealType;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -96,6 +99,13 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         initPresenter();
         setupListeners();
         loadMealDetails();
+
+        // Cache plan selection if coming from Planner
+        if (sessionManager.hasPlanSelection()) {
+            plannedDate = sessionManager.getSelectedPlanDate();
+            plannedMealType = sessionManager.getSelectedMealType();
+            // Do not clear here, wait until added or cancelled
+        }
     }
 
     private void initViews(View view) {
@@ -133,6 +143,26 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
                     androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false));
             rvIngredients.setAdapter(ingredientAdapter);
         }
+
+        // Guest Mode Logic
+        if (sessionManager.isGuest()) {
+            if (btnAddToPlan != null) {
+                // btnAddToPlan.setEnabled(false); // Or keep enabled and show login prompt
+                // User requirement: "can only view..."
+                // Disabling might be clearer, or hiding.
+                // But typically we leave them and prompt login.
+                // The current listener ALREADY checks isGuest and shows error.
+                // I will update the error message to be more prompt-like or use a dialog.
+                // For now, let's keep the existing listener logic but maybe visually indicate
+                // it?
+                // Actually, the listeners already handle it:
+                // if (sessionManager.isGuest()) { showError("Please login..."); return; }
+                // So I will just leave it as is, or maybe update the "showError" to be a dialog
+                // to login?
+                // The prompt "Please login to add to plan" is sufficient for now.
+                // I will just make sure the calendar button is also restricted if not already.
+            }
+        }
     }
 
     private void initPresenter() {
@@ -163,12 +193,10 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
                     showError("Please login to add to plan");
                     return;
                 }
-                // Check if coming from Planner with pre-selected date and meal type
-                if (sessionManager.hasPlanSelection()) {
-                    String date = sessionManager.getSelectedPlanDate();
-                    String mealType = sessionManager.getSelectedMealType();
-                    sessionManager.clearPlanSelection(); // Clear after use
-                    presenter.addToPlan(date, mealType);
+
+                // Use cached selection if available (preserves behavior across multiple clicks)
+                if (plannedDate != null && plannedMealType != null) {
+                    presenter.addToPlan(plannedDate, plannedMealType);
                 } else {
                     // Fallback to date picker if accessed directly (from Home/Search)
                     showAddToPlanDialog();
@@ -178,6 +206,10 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
         if (btnAddToCalendar != null) {
             btnAddToCalendar.setOnClickListener(v -> {
+                if (sessionManager.isGuest()) {
+                    showError("Please login to add to calendar");
+                    return;
+                }
                 if (ContextCompat.checkSelfPermission(requireContext(),
                         Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
                     showCalendarDialogInternal(false);
@@ -405,6 +437,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     @Override
     public void onAddedToPlan() {
         Toast.makeText(requireContext(), R.string.meal_added_to_plan, Toast.LENGTH_SHORT).show();
+        sessionManager.clearPlanSelection();
+        // Explicitly navigate to PlannerFragment
+        Navigation.findNavController(requireView()).navigate(R.id.plannerFragment);
     }
 
     private void loadYouTubeInWebView(String videoId) {

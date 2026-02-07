@@ -55,6 +55,8 @@
                 app:boxCornerRadiusTopStart="@dimen/corner_radius_medium"
                 app:boxStrokeColor="@color/border_dark"
                 app:hintTextColor="@color/text_hint"
+                android:textColorHint="@color/text_hint"
+                app:placeholderTextColor="@color/text_hint"
                 app:startIconDrawable="@drawable/ic_email"
                 app:startIconTint="@color/text_secondary">
 
@@ -85,6 +87,8 @@
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/text_secondary"
                 app:hintTextColor="@color/text_hint"
+                android:textColorHint="@color/text_hint"
+                app:placeholderTextColor="@color/text_hint"
                 app:startIconDrawable="@drawable/ic_lock"
                 app:startIconTint="@color/text_secondary">
 
