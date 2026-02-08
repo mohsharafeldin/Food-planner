@@ -3,6 +3,8 @@ package com.example.foodplanner.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import io.reactivex.rxjava3.core.Observable;
+
 public class SessionManager {
     private static final String PREF_NAME = "FoodPlannerPrefs";
     private static final String KEY_LOGGED_IN = "isLoggedIn";
@@ -120,5 +122,31 @@ public class SessionManager {
         editor.remove(KEY_MEAL_TYPE);
         editor.putBoolean(KEY_HAS_PLAN_SELECTION, false);
         editor.commit();
+    }
+
+    // RxJava Observables for preferences
+    public Observable<Boolean> getLoggedInObservable() {
+        return getBooleanObservable(KEY_LOGGED_IN, false);
+    }
+
+    public Observable<Boolean> isGuestObservable() {
+        return getBooleanObservable(KEY_GUEST, false);
+    }
+
+    private Observable<Boolean> getBooleanObservable(String key, boolean defValue) {
+        return Observable.create(emitter -> {
+            // Emit initial value
+            emitter.onNext(pref.getBoolean(key, defValue));
+
+            SharedPreferences.OnSharedPreferenceChangeListener listener = (sharedPreferences, changedKey) -> {
+                if (key.equals(changedKey)) {
+                    emitter.onNext(sharedPreferences.getBoolean(key, defValue));
+                }
+            };
+
+            pref.registerOnSharedPreferenceChangeListener(listener);
+
+            emitter.setCancellable(() -> pref.unregisterOnSharedPreferenceChangeListener(listener));
+        });
     }
 }
