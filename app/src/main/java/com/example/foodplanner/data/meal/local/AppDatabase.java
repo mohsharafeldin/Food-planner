@@ -10,7 +10,7 @@ import com.example.foodplanner.data.meal.model.FavoriteMeal;
 import com.example.foodplanner.data.meal.model.PlannedMeal;
 import com.example.foodplanner.data.meal.model.User;
 
-@Database(entities = { FavoriteMeal.class, PlannedMeal.class, User.class }, version = 2, exportSchema = false)
+@Database(entities = { FavoriteMeal.class, PlannedMeal.class, User.class }, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "food_planner_db";

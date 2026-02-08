@@ -2,7 +2,7 @@ package com.example.foodplanner;
 
 import android.app.Application;
 
-import com.example.foodplanner.data.meal.local.MealDatabase;
+import com.example.foodplanner.data.meal.local.AppDatabase;
 
 public class FoodPlannerApplication extends Application {
 
@@ -14,7 +14,7 @@ public class FoodPlannerApplication extends Application {
         instance = this;
 
         // Initialize database
-        MealDatabase.getInstance(this);
+        com.example.foodplanner.data.meal.local.AppDatabase.getInstance(this);
     }
 
     public static FoodPlannerApplication getInstance() {
