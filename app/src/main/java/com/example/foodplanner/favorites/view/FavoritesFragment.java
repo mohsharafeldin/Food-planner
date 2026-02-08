@@ -64,14 +64,36 @@ public class FavoritesFragment extends Fragment implements FavoritesView,
         setupSearch();
     }
 
+    private String currentUserId;
+
     @Override
     public void onResume() {
         super.onResume();
+        if (sessionManager == null) {
+            // Should be initialized in initViews called from onViewCreated
+            // If null here, re-initialize
+            sessionManager = new SessionManager(requireContext());
+            currentUserId = sessionManager.getUserId();
+        }
+
         if (sessionManager.isGuest()) {
             showEmptyFavorites();
             return;
         }
-        presenter.loadFavorites();
+
+        // Check if user has changed
+        String newUserId = sessionManager.getUserId();
+        if (currentUserId == null || !newUserId.equals(currentUserId)) {
+            if (presenter != null) {
+                presenter.detachView();
+            }
+            currentUserId = newUserId;
+            initPresenter();
+        }
+
+        if (presenter != null) {
+            presenter.loadFavorites();
+        }
     }
 
     private void initViews(View view) {
@@ -80,25 +102,12 @@ public class FavoritesFragment extends Fragment implements FavoritesView,
         layoutEmpty = view.findViewById(R.id.layout_empty);
         etSearch = view.findViewById(R.id.et_search_favorites);
         btnSearch = view.findViewById(R.id.btn_search);
-        // Find title via traversal or id if possible.
-        // Based on layout, Title is the first child of the inner horizontal linear
-        // layout.
-        // Or better, let's assign an ID to the Title TextView in the layout file in a
-        // separate step?
-        // No, I can find it by id if I knew it. The layout didn't have an ID for the
-        // title TextView.
-        // Let's assume for now we just toggle visibility of etSearch and keeping Title
-        // creates a mess?
-        // Actually, without an ID for the title, I cannot hide it easily.
-        // I will trust the user to add an ID or I will add it now blindly?
-        // Let's look at the layout file content again.
-        // Line 32 is the TextView. It has NO ID.
-        // I should have added an ID.
-        // I will select the parent LinearLayout and get child at 0.
-        LinearLayout headerLayout = (LinearLayout) btnSearch.getParent();
-        tvTitle = (android.widget.TextView) headerLayout.getChildAt(0);
+        tvTitle = view.findViewById(R.id.tv_title);
 
         sessionManager = new SessionManager(requireContext());
+        currentUserId = sessionManager.getUserId();
+
+        rvFavorites.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(requireContext()));
 
         // Guest Mode Logic
         if (sessionManager.isGuest()) {
@@ -110,9 +119,27 @@ public class FavoritesFragment extends Fragment implements FavoritesView,
                     Navigation.findNavController(view).navigate(R.id.action_favorites_to_auth);
                 });
             }
-
-            // Do NOT hide main content, just show overlay
+            // Hide main content
+            if (rvFavorites != null)
+                rvFavorites.setVisibility(View.GONE);
+            if (layoutEmpty != null)
+                layoutEmpty.setVisibility(View.GONE);
+            if (btnSearch != null)
+                btnSearch.setVisibility(View.GONE);
+            if (tvTitle != null)
+                tvTitle.setText(R.string.guest_mode_title);
         }
+    }
+
+    // ... setupSearch ...
+
+    // ... hideKeyboard ...
+
+    private void initPresenter() {
+        MealRepository repository = MealRepository.getInstance(requireContext());
+        // Use currentUserId which is updated
+        presenter = new FavoritesPresenter(repository, currentUserId);
+        presenter.attachView(this);
     }
 
     private void setupSearch() {
@@ -178,13 +205,6 @@ public class FavoritesFragment extends Fragment implements FavoritesView,
         android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext()
                 .getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
-    }
-
-    private void initPresenter() {
-        MealRepository repository = MealRepository.getInstance(requireContext());
-        String userId = sessionManager.getUserId();
-        presenter = new FavoritesPresenter(repository, userId);
-        presenter.attachView(this);
     }
 
     private void setupAdapter() {

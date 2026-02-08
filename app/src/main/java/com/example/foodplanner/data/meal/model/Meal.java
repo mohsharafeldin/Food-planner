@@ -120,6 +120,17 @@ public class Meal {
     @SerializedName("strMeasure20")
     private String strMeasure20;
 
+    @Ignore
+    private boolean isFavorite;
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
     public Meal() {
     }
 

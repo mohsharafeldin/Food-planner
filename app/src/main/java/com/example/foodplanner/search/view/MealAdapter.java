@@ -108,11 +108,34 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
                 }
             });
 
+            if (showFavoriteButton) {
+                btnFavorite.setVisibility(View.VISIBLE);
+                // Reset to default style for non-search screens (avoid recycling issues)
+                btnFavorite.setImageResource(R.drawable.ic_favorite);
+                btnFavorite
+                        .setColorFilter(androidx.core.content.ContextCompat.getColor(context, R.color.primary_color));
+            } else {
+                if (meal.isFavorite()) {
+                    btnFavorite.setVisibility(View.VISIBLE);
+                    btnFavorite.setImageResource(R.drawable.ic_favorite);
+                    btnFavorite.setColorFilter(android.graphics.Color.RED);
+                } else {
+                    btnFavorite.setVisibility(View.GONE);
+                }
+            }
+
             btnFavorite.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onFavoriteClick(meal.getIdMeal());
                 }
             });
         }
+    }
+
+    private boolean showFavoriteButton = true;
+
+    public void setShowFavoriteButton(boolean show) {
+        this.showFavoriteButton = show;
+        notifyDataSetChanged();
     }
 }

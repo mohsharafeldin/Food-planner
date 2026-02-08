@@ -137,6 +137,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         tvVideoLabel = null;
 
         sessionManager = new SessionManager(requireContext());
+        currentUserId = sessionManager.getUserId();
         ingredientAdapter = new IngredientAdapter(requireContext());
         if (rvIngredients != null) {
             rvIngredients.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(requireContext(),
@@ -412,26 +413,56 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         if (webView != null)
             webView.onResume();
         // ExoPlayer auto-resume not strictly forced, let user press play
+
+        if (sessionManager == null) {
+            sessionManager = new SessionManager(requireContext());
+            currentUserId = sessionManager.getUserId();
+        }
+
+        // Check if user has changed
+        String newUserId = sessionManager.getUserId();
+        if (currentUserId == null || !newUserId.equals(currentUserId)) {
+            if (presenter != null) {
+                presenter.detachView();
+            }
+            currentUserId = newUserId;
+            initPresenter();
+            // Reload meal details to update favorite status
+            loadMealDetails();
+        }
     }
+
+    private String currentUserId;
 
     @Override
     public void showFavoriteStatus(boolean isFavorite) {
         this.isFavorite = isFavorite;
-        btnFavorite.setImageResource(isFavorite ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
+        updateFavoriteIcon(isFavorite);
     }
 
     @Override
     public void onFavoriteAdded() {
         isFavorite = true;
-        btnFavorite.setImageResource(R.drawable.ic_favorite);
+        updateFavoriteIcon(true);
         Toast.makeText(requireContext(), R.string.favorite_added, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFavoriteRemoved() {
         isFavorite = false;
-        btnFavorite.setImageResource(R.drawable.ic_favorite_border);
+        updateFavoriteIcon(false);
         Toast.makeText(requireContext(), R.string.favorite_removed, Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateFavoriteIcon(boolean isFav) {
+        if (isFav) {
+            btnFavorite.setImageResource(R.drawable.ic_favorite);
+            btnFavorite.setColorFilter(android.graphics.Color.RED);
+        } else {
+            btnFavorite.setImageResource(R.drawable.ic_favorite_border);
+            // Reset to white (or original tint)
+            btnFavorite.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white));
+        }
     }
 
     @Override

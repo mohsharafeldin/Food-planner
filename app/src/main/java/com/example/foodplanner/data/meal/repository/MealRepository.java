@@ -134,10 +134,6 @@ public class MealRepository {
         return apiService.searchMealByName(name);
     }
 
-    public Completable addFavoriteDirectly(FavoriteMeal favorite) {
-        return favoriteMealDAO.insertFavorite(favorite);
-    }
-
     // ============ Backup/Sync Methods ============
 
     public Completable deleteAllFavorites(String userId) {
@@ -164,7 +160,10 @@ public class MealRepository {
         return plannedMealDAO.insertPlannedMeal(meal);
     }
 
-    public Completable addFavorite(FavoriteMeal meal) {
+    public Completable addFavoriteDirectly(FavoriteMeal meal) {
+        if (meal.getUserId() == null || meal.getUserId().isEmpty()) {
+            return Completable.error(new IllegalArgumentException("User ID is required for favorites"));
+        }
         return favoriteMealDAO.insertFavorite(meal);
     }
 }

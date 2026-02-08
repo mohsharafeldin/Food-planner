@@ -76,6 +76,7 @@
 
     <!-- Profile -->
     <string name="guest_user">Guest User</string>
+    <string name="guest_mode_title">Guest Mode</string>
     <string name="backup_data">Backup Data</string>
     <string name="restore_data">Restore Data</string>
     <string name="backup_success">Data backed up successfully</string>

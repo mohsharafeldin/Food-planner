@@ -160,7 +160,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         for (FavoriteMeal meal : favorites) {
             meal.setUserId(userId);
             addDisposable(
-                    repository.addFavorite(meal)
+                    repository.addFavoriteDirectly(meal)
                             .subscribeOn(Schedulers.io())
                             .subscribe(() -> {
                             }, error -> {

@@ -67,13 +67,38 @@ public class PlannerFragment extends Fragment implements PlannerView {
         loadMealsForDate(currentDate);
     }
 
+    private String currentUserId;
+
     @Override
     public void onResume() {
         super.onResume();
         // Clear any pending plan selection when returning to planner
-        // This ensures if user cancelled the flow, we don't keep old selection
         if (sessionManager != null) {
             sessionManager.clearPlanSelection();
+        } else {
+            sessionManager = new SessionManager(requireContext());
+            currentUserId = sessionManager.getUserId();
+        }
+
+        if (sessionManager.isGuest()) {
+            return;
+        }
+
+        // Check if user has changed
+        String newUserId = sessionManager.getUserId();
+        if (currentUserId == null || !newUserId.equals(currentUserId)) {
+            if (presenter != null) {
+                presenter.detachView();
+            }
+            currentUserId = newUserId;
+            initPresenter();
+            // Reload for current date with new user
+            loadMealsForDate(currentDate);
+        } else {
+            // User is same, maybe just reload to be safe?
+            // loadMealsForDate(currentDate);
+            // Actually, if we came back from adding a meal, we might want to reload.
+            // But let's stick to the user change logic for now.
         }
     }
 
@@ -91,6 +116,7 @@ public class PlannerFragment extends Fragment implements PlannerView {
         btnNextWeek = view.findViewById(R.id.btn_next_week);
 
         sessionManager = new SessionManager(requireContext());
+        currentUserId = sessionManager.getUserId();
 
         // Guest Mode Logic
         if (sessionManager.isGuest()) {
@@ -104,37 +130,14 @@ public class PlannerFragment extends Fragment implements PlannerView {
             }
             // Hide main content
             View content = (View) view.findViewById(R.id.layout_calendar_strip).getParent().getParent(); // Get
-            // NestedScrollView
+                                                                                                         // NestedScrollView
             if (content instanceof androidx.core.widget.NestedScrollView) {
                 ((View) content).setVisibility(View.GONE);
             }
-            // Also hide sections just in case, or relying on NestedScrollView is enough.
-            // NestedScrollView id isn't set in layout, but it wraps the content.
-            // Actually, the structure in XML:
-            // Coordinator -> AppBar, NestedScrollView, include(guest)
-            // We need to hide NestedScrollView.
-            // In initViews, we haven't found NestedScrollView by ID.
-            // Let's rely on finding it or just hiding the sections container if possible?
-            // Better: Find NestedScrollView by traversal or ID if added.
-            // I didn't add ID to NestedScrollView in XML edit.
-            // Let's modify initViews to find it properly or duplicate hiding logic for
-            // sections.
-            // Wait, I can just hide the sections container.
-            // sectionBreakfast.getParent() is the LinearLayout inside ScrollView.
+            // Also hide sections just in case
             ((View) sectionBreakfast.getParent()).setVisibility(View.GONE);
 
-            // Also hide AppBarLayout to be clean? Or keep it?
-            // User said "restricted", usually implies full block.
-            // Keeping header might be confusing if buttons work?
-            // The calendar strip is in AppBarLayout.
-            // Let's hide the AppBarLayout too.
-            View appBar = (View) view.findViewById(R.id.layout_calendar_strip).getParent().getParent(); // LinearLayout
-                                                                                                        // ->
-            // RelativeLayout ->
-            // AppBarLayout? No.
-            // XML: AppBar -> LinearLayout -> (RelativeLayout,
-            // HorizontalScrollView(calendar_strip))
-            // layout_calendar_strip is inside HorizontalScrollView
+            // Also hide AppBarLayout
             View calendarStripParent = (View) calendarStrip.getParent(); // HorizontalScrollView
             View headerLinear = (View) calendarStripParent.getParent(); // LinearLayout
             View appBarLayout = (View) headerLinear.getParent(); // AppBarLayout
@@ -142,8 +145,6 @@ public class PlannerFragment extends Fragment implements PlannerView {
             if (appBarLayout instanceof com.google.android.material.appbar.AppBarLayout) {
                 appBarLayout.setVisibility(View.GONE);
             }
-
-            // return; // Exit early, don't setup other views
         }
 
         currentWeekStart = Calendar.getInstance();
@@ -163,10 +164,12 @@ public class PlannerFragment extends Fragment implements PlannerView {
         }
     }
 
+    // ... existing code ...
+
     private void initPresenter() {
         MealRepository repository = MealRepository.getInstance(requireContext());
-        String userId = sessionManager.getUserId();
-        presenter = new PlannerPresenter(repository, userId);
+        // Use currentUserId which is updated
+        presenter = new PlannerPresenter(repository, currentUserId);
         presenter.attachView(this);
     }
 

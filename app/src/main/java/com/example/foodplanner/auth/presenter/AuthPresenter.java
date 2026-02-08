@@ -24,7 +24,6 @@ public class AuthPresenter {
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final Context context;
 
-
     private static final String WEB_CLIENT_ID = "464510016637-hqrhqf8ko91tsh32donukb8fob415jsg.apps.googleusercontent.com";
 
     public AuthPresenter(Context context) {
@@ -164,7 +163,7 @@ public class AuthPresenter {
                                     for (var meal : favorites) {
                                         meal.setUserId(userId);
                                         disposables.add(
-                                                repository.addFavorite(meal)
+                                                repository.addFavoriteDirectly(meal)
                                                         .subscribeOn(Schedulers.io())
                                                         .subscribe(() -> {
                                                         }, error -> {
