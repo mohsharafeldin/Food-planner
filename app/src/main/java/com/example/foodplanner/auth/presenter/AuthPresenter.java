@@ -143,65 +143,30 @@ public class AuthPresenter {
     private void handleLoginSuccess(FirebaseUser user) {
         saveFirebaseSession(user);
 
-        // Restore data from Firestore and merge with local
         String userId = user.getUid();
-        syncDataFromFirestore(userId);
+
+        // Full Sync: Migrate -> Backup -> Restore
+        disposables.add(
+                repository.migrateAllData(userId)
+                        .andThen(repository.getAllFavorites(userId).firstOrError())
+                        .subscribeOn(Schedulers.io())
+                        .flatMapCompletable(favorites -> syncHelper.backupFavorites(userId, favorites))
+                        .andThen(repository.getAllPlannedMeals(userId).firstOrError())
+                        .flatMapCompletable(meals -> syncHelper.backupPlannedMeals(userId, meals))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> restoreData(userId),
+                                error -> restoreData(userId)));
     }
 
-    /**
-     * Sync data from Firestore to local Room database
-     */
-    private void syncDataFromFirestore(String userId) {
-        // Restore favorites
+    private void restoreData(String userId) {
         disposables.add(
-                syncHelper.restoreFavorites(userId)
+                repository.restoreAllData(userId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                favorites -> {
-                                    // Save to local Room database
-                                    for (var meal : favorites) {
-                                        meal.setUserId(userId);
-                                        disposables.add(
-                                                repository.addFavoriteDirectly(meal)
-                                                        .subscribeOn(Schedulers.io())
-                                                        .subscribe(() -> {
-                                                        }, error -> {
-                                                        }));
-                                    }
-
-                                    // Now restore planned meals
-                                    restorePlannedMeals(userId);
-                                },
-                                error -> {
-                                    // Even if restore fails, continue to login
-                                    restorePlannedMeals(userId);
-                                }));
-    }
-
-    private void restorePlannedMeals(String userId) {
-        disposables.add(
-                syncHelper.restorePlannedMeals(userId)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                plannedMeals -> {
-                                    // Save to local Room database
-                                    for (var meal : plannedMeals) {
-                                        meal.setUserId(userId);
-                                        disposables.add(
-                                                repository.insertPlannedMealDirectly(meal)
-                                                        .subscribeOn(Schedulers.io())
-                                                        .subscribe(() -> {
-                                                        }, error -> {
-                                                        }));
-                                    }
-                                    completeLogin();
-                                },
-                                error -> {
-                                    // Even if restore fails, continue to login
-                                    completeLogin();
-                                }));
+                                () -> completeLogin(),
+                                error -> completeLogin()));
     }
 
     private void completeLogin() {

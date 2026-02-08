@@ -2,6 +2,7 @@ package com.example.foodplanner.data.meal.repository;
 
 import android.content.Context;
 
+import com.example.foodplanner.data.auth.firebase.FirebaseSyncHelper;
 import com.example.foodplanner.data.meal.local.AppDatabase;
 import com.example.foodplanner.data.meal.local.FavoriteMealDAO;
 import com.example.foodplanner.data.meal.local.PlannedMealDAO;
@@ -28,11 +29,14 @@ public class MealRepository {
     private final FavoriteMealDAO favoriteMealDAO;
     private final PlannedMealDAO plannedMealDAO;
 
+    private final FirebaseSyncHelper syncHelper;
+
     private MealRepository(Context context) {
         apiService = RetrofitClient.getInstance().getMealApiService();
         AppDatabase database = AppDatabase.getInstance(context);
         favoriteMealDAO = database.favoriteMealDAO();
         plannedMealDAO = database.plannedMealDAO();
+        syncHelper = FirebaseSyncHelper.getInstance();
     }
 
     public static synchronized MealRepository getInstance(Context context) {
@@ -84,15 +88,27 @@ public class MealRepository {
 
     public Completable addFavorite(Meal meal, String userId) {
         FavoriteMeal favMeal = FavoriteMeal.fromMeal(meal, userId);
-        return favoriteMealDAO.insertFavorite(favMeal);
+        return favoriteMealDAO.insertFavorite(favMeal)
+                .andThen(backupFavorites(userId));
     }
 
     public Completable removeFavorite(FavoriteMeal meal) {
-        return favoriteMealDAO.deleteFavorite(meal);
+        return favoriteMealDAO.deleteFavorite(meal)
+                .andThen(backupFavorites(meal.getUserId()));
     }
 
     public Completable removeFavoriteById(String mealId, String userId) {
-        return favoriteMealDAO.deleteFavoriteById(mealId, userId);
+        return favoriteMealDAO.deleteFavoriteById(mealId, userId)
+                .andThen(backupFavorites(userId));
+    }
+
+    private Completable backupFavorites(String userId) {
+        if (userId == null || userId.isEmpty())
+            return Completable.complete();
+        return favoriteMealDAO.getAllFavorites(userId)
+                .firstOrError()
+                .flatMapCompletable(favorites -> syncHelper.backupFavorites(userId, favorites))
+                .onErrorComplete(); // Ignore sync errors to not fail the local operation
     }
 
     public Flowable<List<FavoriteMeal>> getAllFavorites(String userId) {
@@ -107,11 +123,22 @@ public class MealRepository {
 
     public Completable addPlannedMeal(Meal meal, String date, String mealType, String userId) {
         PlannedMeal plannedMeal = PlannedMeal.fromMeal(meal, date, mealType, userId);
-        return plannedMealDAO.insertPlannedMeal(plannedMeal);
+        return plannedMealDAO.insertPlannedMeal(plannedMeal)
+                .andThen(backupPlannedMeals(userId));
     }
 
     public Completable removePlannedMeal(PlannedMeal meal) {
-        return plannedMealDAO.deletePlannedMeal(meal);
+        return plannedMealDAO.deletePlannedMeal(meal)
+                .andThen(backupPlannedMeals(meal.getUserId()));
+    }
+
+    private Completable backupPlannedMeals(String userId) {
+        if (userId == null || userId.isEmpty())
+            return Completable.complete();
+        return plannedMealDAO.getAllPlannedMeals(userId)
+                .firstOrError()
+                .flatMapCompletable(meals -> syncHelper.backupPlannedMeals(userId, meals))
+                .onErrorComplete(); // Ignore sync errors
     }
 
     public Flowable<List<PlannedMeal>> getAllPlannedMeals(String userId) {
@@ -165,5 +192,36 @@ public class MealRepository {
             return Completable.error(new IllegalArgumentException("User ID is required for favorites"));
         }
         return favoriteMealDAO.insertFavorite(meal);
+    }
+
+    public Completable migrateAllData(String newUserId) {
+        return favoriteMealDAO.migrateAllFavorites(newUserId)
+                .andThen(favoriteMealDAO.deleteYieldedFavorites(newUserId))
+                .andThen(plannedMealDAO.migrateAllPlannedMeals(newUserId))
+                .andThen(plannedMealDAO.deduplicatePlannedMeals());
+    }
+
+    public Completable restoreAllData(String userId) {
+        return syncHelper.restoreFavorites(userId)
+                .flatMapCompletable(favorites -> {
+                    // Start with favorites
+                    return Flowable.fromIterable(favorites)
+                            .flatMapCompletable(meal -> {
+                                meal.setUserId(userId);
+                                return favoriteMealDAO.insertFavorite(meal);
+                            });
+                })
+                .andThen(syncHelper.restorePlannedMeals(userId))
+                .flatMapCompletable(plannedMeals -> {
+                    if (plannedMeals == null || plannedMeals.isEmpty()) {
+                        return Completable.complete();
+                    }
+                    for (PlannedMeal meal : plannedMeals) {
+                        meal.setUserId(userId);
+                    }
+                    // Clear existing plans to avoid duplicates, then insert new
+                    return plannedMealDAO.deleteAllPlannedMeals(userId)
+                            .andThen(plannedMealDAO.insertAllPlannedMeals(plannedMeals));
+                });
     }
 }

@@ -27,8 +27,8 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     private CircleImageView ivProfile;
     private TextView tvUserName, tvUserEmail;
-    private CardView cardSync, cardGuestPrompt;
-    private MaterialButton btnSync, btnBackup, btnRestore, btnLogin, btnLogout;
+    private CardView cardGuestPrompt;
+    private MaterialButton btnLogin, btnLogout;
     private ProgressBar progressBar;
 
     private ProfilePresenter presenter;
@@ -56,11 +56,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
         ivProfile = view.findViewById(R.id.iv_profile);
         tvUserName = view.findViewById(R.id.tv_user_name);
         tvUserEmail = view.findViewById(R.id.tv_user_email);
-        cardSync = view.findViewById(R.id.card_sync);
         cardGuestPrompt = view.findViewById(R.id.card_guest_prompt);
-        btnSync = view.findViewById(R.id.btn_sync);
-        btnBackup = view.findViewById(R.id.btn_backup);
-        btnRestore = view.findViewById(R.id.btn_restore);
         btnLogin = view.findViewById(R.id.btn_login);
         btnLogout = view.findViewById(R.id.btn_logout);
         progressBar = view.findViewById(R.id.progress_bar);
@@ -89,8 +85,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
             tvUserName.setText(userName != null && !userName.isEmpty() ? userName : "User");
             tvUserEmail.setText(userEmail != null && !userEmail.isEmpty() ? userEmail : "");
 
-            // Show sync options, hide guest prompt
-            cardSync.setVisibility(View.VISIBLE);
+            // Hide guest prompt
             cardGuestPrompt.setVisibility(View.GONE);
             btnLogout.setVisibility(View.VISIBLE);
         } else {
@@ -98,8 +93,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
             tvUserName.setText("Guest");
             tvUserEmail.setText("Login to sync your data");
 
-            // Hide sync options, show guest prompt
-            cardSync.setVisibility(View.GONE);
+            // Show guest prompt
             cardGuestPrompt.setVisibility(View.VISIBLE);
             btnLogout.setVisibility(View.VISIBLE);
             btnLogout.setText("Exit Guest Mode");
@@ -107,14 +101,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
     }
 
     private void setupListeners() {
-        btnSync.setOnClickListener(v -> presenter.syncData());
-
-        btnBackup.setOnClickListener(v -> presenter.backupData());
-
-        btnRestore.setOnClickListener(v -> presenter.restoreData());
-
         btnLogin.setOnClickListener(v -> navigateToAuth());
-
         btnLogout.setOnClickListener(v -> presenter.logout());
     }
 
@@ -128,17 +115,11 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
-        btnSync.setEnabled(false);
-        btnBackup.setEnabled(false);
-        btnRestore.setEnabled(false);
     }
 
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.GONE);
-        btnSync.setEnabled(true);
-        btnBackup.setEnabled(true);
-        btnRestore.setEnabled(true);
     }
 
     @Override
@@ -149,21 +130,6 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void showNetworkError() {
         Toast.makeText(requireContext(), "Network error. Please check your connection.", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onBackupSuccess() {
-        Toast.makeText(requireContext(), "Data backed up successfully!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRestoreSuccess() {
-        Toast.makeText(requireContext(), "Data restored successfully!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSyncSuccess() {
-        Toast.makeText(requireContext(), "Data synced successfully!", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -40,4 +40,10 @@ public interface FavoriteMealDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertAllFavorites(List<FavoriteMeal> meals);
+
+    @Query("UPDATE OR IGNORE favorite_meals SET userId = :newUserId")
+    Completable migrateAllFavorites(String newUserId);
+
+    @Query("DELETE FROM favorite_meals WHERE userId != :currentUserId")
+    Completable deleteYieldedFavorites(String currentUserId);
 }

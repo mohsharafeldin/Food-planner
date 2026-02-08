@@ -42,4 +42,11 @@ public interface PlannedMealDAO {
 
     @Query("SELECT * FROM planned_meals WHERE userId = :userId")
     List<PlannedMeal> getAllPlannedMealsSync(String userId);
+
+    @Query("UPDATE planned_meals SET userId = :newUserId")
+    Completable migrateAllPlannedMeals(String newUserId);
+
+    // Keep only one entry per meal-slot-date-user combination
+    @Query("DELETE FROM planned_meals WHERE id NOT IN (SELECT MIN(id) FROM planned_meals GROUP BY mealId, date, mealType, userId)")
+    Completable deduplicatePlannedMeals();
 }

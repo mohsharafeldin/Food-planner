@@ -46,68 +46,7 @@
 
     </LinearLayout>
 
-    <!-- Sync Options (Hidden for guests) -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_sync"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="visible"
-        app:cardBackgroundColor="@color/surface_dark"
-        app:cardCornerRadius="@dimen/corner_radius_medium"
-        app:cardElevation="@dimen/card_elevation">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Data Sync"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_sync"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="8dp"
-                android:text="Sync Data"
-                app:backgroundTint="@color/primary_color"
-                app:cornerRadius="@dimen/corner_radius_medium"
-                app:icon="@drawable/ic_sync" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_backup"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/backup_data"
-                android:textColor="@color/text_primary"
-                app:cornerRadius="@dimen/corner_radius_medium"
-                app:icon="@drawable/ic_cloud_upload"
-                app:strokeColor="@color/border_dark" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_restore"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/restore_data"
-                android:textColor="@color/text_primary"
-                app:cornerRadius="@dimen/corner_radius_medium"
-                app:icon="@drawable/ic_cloud_download"
-                app:strokeColor="@color/border_dark" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
 
     <!-- Guest Login Prompt -->
     <androidx.cardview.widget.CardView
