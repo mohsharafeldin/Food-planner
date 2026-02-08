@@ -18,9 +18,11 @@ public class SearchPresenter extends BasePresenter<SearchView> {
 
     private final MealRepository repository;
     private Disposable searchDisposable;
+    private final String userId;
 
-    public SearchPresenter(MealRepository repository) {
+    public SearchPresenter(MealRepository repository, String userId) {
         this.repository = repository;
+        this.userId = userId;
     }
 
     public void search(String query, String searchType) {
@@ -132,7 +134,22 @@ public class SearchPresenter extends BasePresenter<SearchView> {
 
     private Disposable searchByName(String query) {
         String formattedQuery = capitalizeFirstLetter(query);
-        return repository.searchMealsByName(formattedQuery)
+        return io.reactivex.rxjava3.core.Single.zip(
+                repository.searchMealByName(formattedQuery),
+                repository.getAllFavorites(userId).first(new ArrayList<>()),
+                (response, favorites) -> {
+                    if (response.getMeals() != null) {
+                        for (com.example.foodplanner.data.meal.model.Meal meal : response.getMeals()) {
+                            for (com.example.foodplanner.data.meal.model.FavoriteMeal fav : favorites) {
+                                if (fav.getIdMeal().equals(meal.getIdMeal())) {
+                                    meal.setFavorite(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    return response;
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -156,7 +173,22 @@ public class SearchPresenter extends BasePresenter<SearchView> {
 
     private Disposable searchByCategory(String category) {
         String formattedCategory = capitalizeFirstLetter(category);
-        return repository.filterByCategory(formattedCategory)
+        return io.reactivex.rxjava3.core.Single.zip(
+                repository.filterByCategory(formattedCategory),
+                repository.getAllFavorites(userId).first(new ArrayList<>()),
+                (response, favorites) -> {
+                    if (response.getMeals() != null) {
+                        for (com.example.foodplanner.data.meal.model.Meal meal : response.getMeals()) {
+                            for (com.example.foodplanner.data.meal.model.FavoriteMeal fav : favorites) {
+                                if (fav.getIdMeal().equals(meal.getIdMeal())) {
+                                    meal.setFavorite(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    return response;
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -180,7 +212,22 @@ public class SearchPresenter extends BasePresenter<SearchView> {
 
     private Disposable searchByCountry(String country) {
         String formattedCountry = capitalizeFirstLetter(country);
-        return repository.filterByArea(formattedCountry)
+        return io.reactivex.rxjava3.core.Single.zip(
+                repository.filterByArea(formattedCountry),
+                repository.getAllFavorites(userId).first(new ArrayList<>()),
+                (response, favorites) -> {
+                    if (response.getMeals() != null) {
+                        for (com.example.foodplanner.data.meal.model.Meal meal : response.getMeals()) {
+                            for (com.example.foodplanner.data.meal.model.FavoriteMeal fav : favorites) {
+                                if (fav.getIdMeal().equals(meal.getIdMeal())) {
+                                    meal.setFavorite(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    return response;
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -211,7 +258,22 @@ public class SearchPresenter extends BasePresenter<SearchView> {
 
     private Disposable searchByIngredient(String ingredient) {
         String formattedIngredient = capitalizeFirstLetter(ingredient);
-        return repository.filterByIngredient(formattedIngredient)
+        return io.reactivex.rxjava3.core.Single.zip(
+                repository.filterByIngredient(formattedIngredient),
+                repository.getAllFavorites(userId).first(new ArrayList<>()),
+                (response, favorites) -> {
+                    if (response.getMeals() != null) {
+                        for (com.example.foodplanner.data.meal.model.Meal meal : response.getMeals()) {
+                            for (com.example.foodplanner.data.meal.model.FavoriteMeal fav : favorites) {
+                                if (fav.getIdMeal().equals(meal.getIdMeal())) {
+                                    meal.setFavorite(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    return response;
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

@@ -46,6 +46,7 @@ public class SearchFragment extends Fragment implements SearchView, MealAdapter.
     private SearchPresenter presenter;
     private MealAdapter adapter;
     private String currentSearchType = Constants.SEARCH_BY_NAME;
+    private String lastQuery = "";
 
     private final PublishSubject<String> searchSubject = PublishSubject.create();
     private final CompositeDisposable disposables = new CompositeDisposable();
@@ -67,6 +68,36 @@ public class SearchFragment extends Fragment implements SearchView, MealAdapter.
         setupSearchDebounce();
         setupChipListeners();
         setupSearchAction();
+
+        if (savedInstanceState != null) {
+            currentSearchType = savedInstanceState.getString("currentSearchType", Constants.SEARCH_BY_NAME);
+            lastQuery = savedInstanceState.getString("lastQuery", "");
+        }
+
+        // Apply state (whether restored from Bundle or surviving instance)
+        updateChipStyles();
+
+        // Reload suggestions for the restored type
+        if (presenter != null) {
+            presenter.loadSuggestions(currentSearchType);
+        }
+
+        // Restore search query if present
+        if (!lastQuery.isEmpty() && etSearch != null) {
+            // Check if text is already set to avoid triggering unnecessary listeners or
+            // loops
+            if (!etSearch.getText().toString().equals(lastQuery)) {
+                etSearch.setText(lastQuery);
+                etSearch.setSelection(lastQuery.length()); // Move cursor to end
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("currentSearchType", currentSearchType);
+        outState.putString("lastQuery", lastQuery);
     }
 
     private void initViews(View view) {
@@ -82,13 +113,17 @@ public class SearchFragment extends Fragment implements SearchView, MealAdapter.
     }
 
     private void initPresenter() {
+        com.example.foodplanner.utils.SessionManager sessionManager = new com.example.foodplanner.utils.SessionManager(
+                requireContext());
+        String userId = sessionManager.getUserId();
         MealRepository repository = MealRepository.getInstance(requireContext());
-        presenter = new SearchPresenter(repository);
+        presenter = new SearchPresenter(repository, userId);
         presenter.attachView(this);
     }
 
     private void initAdapter() {
         adapter = new MealAdapter(requireContext(), this);
+        adapter.setShowFavoriteButton(false);
         rvSearchResults.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvSearchResults.setAdapter(adapter);
     }
@@ -102,6 +137,7 @@ public class SearchFragment extends Fragment implements SearchView, MealAdapter.
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                lastQuery = s.toString();
                 searchSubject.onNext(s.toString());
             }
 

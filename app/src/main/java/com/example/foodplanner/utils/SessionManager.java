@@ -71,6 +71,10 @@ public class SessionManager {
     }
 
     public String getUserId() {
+        String firebaseUid = pref.getString(KEY_FIREBASE_UID, null);
+        if (firebaseUid != null && !firebaseUid.isEmpty()) {
+            return firebaseUid;
+        }
         long id = pref.getLong(KEY_USER_ID, -1);
         return id == -1 ? "" : String.valueOf(id);
     }
