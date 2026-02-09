@@ -2,7 +2,8 @@ package com.example.foodplanner;
 
 import android.app.Application;
 
-import com.example.foodplanner.data.meal.local.AppDatabase;
+import com.example.foodplanner.data.db.AppDatabase;
+import com.example.foodplanner.utils.SessionManager;
 
 public class FoodPlannerApplication extends Application {
 
@@ -14,7 +15,10 @@ public class FoodPlannerApplication extends Application {
         instance = this;
 
         // Initialize database
-        com.example.foodplanner.data.meal.local.AppDatabase.getInstance(this);
+        AppDatabase.getInstance(this);
+
+        // Initialize SessionManager singleton
+        SessionManager.init(this);
     }
 
     public static FoodPlannerApplication getInstance() {

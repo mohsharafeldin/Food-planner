@@ -8,6 +8,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.utils.SessionManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,15 +19,15 @@ public class MainActivity extends AppCompatActivity {
 
     private io.reactivex.rxjava3.disposables.CompositeDisposable disposables = new io.reactivex.rxjava3.disposables.CompositeDisposable();
     private com.example.foodplanner.utils.SessionManager sessionManager;
-    private com.example.foodplanner.data.meal.repository.MealRepository repository;
+    private MealRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sessionManager = new com.example.foodplanner.utils.SessionManager(this);
-        repository = com.example.foodplanner.data.meal.repository.MealRepository.getInstance(this);
+        sessionManager = SessionManager.getInstance();
+        repository = MealRepository.getInstance(this);
 
         setupNavigation();
         checkAndSyncData();

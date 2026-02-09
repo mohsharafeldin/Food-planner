@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.foodplanner.home.view.HomeFragment"
+        android:name="com.example.foodplanner.presentation.home.view.HomeFragment"
         android:label="@string/home"
         tools:layout="@layout/fragment_home">
         
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.foodplanner.search.view.SearchFragment"
+        android:name="com.example.foodplanner.presentation.search.view.SearchFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search">
         
@@ -39,7 +39,7 @@
 
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.foodplanner.favorites.view.FavoritesFragment"
+        android:name="com.example.foodplanner.presentation.favorites.view.FavoritesFragment"
         android:label="@string/favorites"
         tools:layout="@layout/fragment_favorites">
         
@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/plannerFragment"
-        android:name="com.example.foodplanner.planner.view.PlannerFragment"
+        android:name="com.example.foodplanner.presentation.planner.view.PlannerFragment"
         android:label="@string/planner"
         tools:layout="@layout/fragment_planner">
         
@@ -77,13 +77,13 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.foodplanner.profile.view.ProfileFragment"
+        android:name="com.example.foodplanner.presentation.profile.view.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/mealDetailsFragment"
-        android:name="com.example.foodplanner.mealdetails.view.MealDetailsFragment"
+        android:name="com.example.foodplanner.presentation.mealdetails.view.MealDetailsFragment"
         android:label="Meal Details"
         tools:layout="@layout/fragment_meal_details">
         
@@ -94,7 +94,7 @@
 
     <fragment
         android:id="@+id/categoryMealsFragment"
-        android:name="com.example.foodplanner.categories.view.CategoryMealsFragment"
+        android:name="com.example.foodplanner.presentation.categories.view.CategoryMealsFragment"
         android:label="Category Meals"
         tools:layout="@layout/fragment_category_meals">
         
@@ -109,7 +109,7 @@
 
     <fragment
         android:id="@+id/countryMealsFragment"
-        android:name="com.example.foodplanner.countries.view.CountryMealsFragment"
+        android:name="com.example.foodplanner.presentation.countries.view.CountryMealsFragment"
         android:label="Country Meals"
         tools:layout="@layout/fragment_country_meals">
         

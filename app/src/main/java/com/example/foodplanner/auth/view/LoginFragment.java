@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.example.foodplanner.utils.SnackbarUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +16,8 @@ import androidx.navigation.Navigation;
 
 import com.example.foodplanner.MainActivity;
 import com.example.foodplanner.R;
-import com.example.foodplanner.auth.presenter.AuthPresenter;
+import com.example.foodplanner.auth.presenter.AuthPresenterContract;
+import com.example.foodplanner.auth.presenter.AuthPresenterImpl;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -27,7 +28,7 @@ public class LoginFragment extends Fragment implements AuthView {
     private ProgressBar progressBar;
     private TextView tvSignUp;
 
-    private AuthPresenter presenter;
+    private AuthPresenterContract presenter;
 
     @Nullable
     @Override
@@ -63,7 +64,7 @@ public class LoginFragment extends Fragment implements AuthView {
     }
 
     private void initPresenter() {
-        presenter = new AuthPresenter(requireContext());
+        presenter = new AuthPresenterImpl(requireContext());
         presenter.attachView(this);
     }
 
@@ -116,14 +117,28 @@ public class LoginFragment extends Fragment implements AuthView {
 
     @Override
     public void onError(String message) {
-        if (isAdded() && getContext() != null) {
-            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        if (isAdded() && getView() != null) {
+            SnackbarUtils.showError(getView(), message);
         }
     }
 
     @Override
     public void onGuestMode() {
         navigateToMain();
+    }
+
+    @Override
+    public void showError(String message) {
+        if (isAdded() && getView() != null) {
+            SnackbarUtils.showError(getView(), message);
+        }
+    }
+
+    @Override
+    public void showNetworkError() {
+        if (isAdded() && getView() != null) {
+            SnackbarUtils.showError(getView(), getString(R.string.network_error));
+        }
     }
 
     private void navigateToMain() {

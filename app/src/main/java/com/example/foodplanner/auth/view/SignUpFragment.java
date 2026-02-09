@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.example.foodplanner.utils.SnackbarUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +17,8 @@ import androidx.navigation.Navigation;
 
 import com.example.foodplanner.MainActivity;
 import com.example.foodplanner.R;
-import com.example.foodplanner.auth.presenter.AuthPresenter;
+import com.example.foodplanner.auth.presenter.AuthPresenterContract;
+import com.example.foodplanner.auth.presenter.AuthPresenterImpl;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -29,7 +30,7 @@ public class SignUpFragment extends Fragment implements AuthView {
     private TextView tvLogin;
     private ImageButton btnBack;
 
-    private AuthPresenter presenter;
+    private AuthPresenterContract presenter;
 
     @Nullable
     @Override
@@ -59,7 +60,7 @@ public class SignUpFragment extends Fragment implements AuthView {
     }
 
     private void initPresenter() {
-        presenter = new AuthPresenter(requireContext());
+        presenter = new AuthPresenterImpl(requireContext());
         presenter.attachView(this);
     }
 
@@ -100,18 +101,36 @@ public class SignUpFragment extends Fragment implements AuthView {
 
     @Override
     public void onSignUpSuccess() {
-        Toast.makeText(requireContext(), "Account created successfully!", Toast.LENGTH_SHORT).show();
+        if (getView() != null) {
+            SnackbarUtils.showSuccess(getView(), "Account created successfully!");
+        }
         navigateToMain();
     }
 
     @Override
     public void onError(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+        if (getView() != null) {
+            SnackbarUtils.showError(getView(), message);
+        }
     }
 
     @Override
     public void onGuestMode() {
         // Not used in signup fragment
+    }
+
+    @Override
+    public void showError(String message) {
+        if (getView() != null) {
+            SnackbarUtils.showError(getView(), message);
+        }
+    }
+
+    @Override
+    public void showNetworkError() {
+        if (getView() != null) {
+            SnackbarUtils.showError(getView(), getString(R.string.network_error));
+        }
     }
 
     private void navigateToMain() {

@@ -1,10 +1,12 @@
 package com.example.foodplanner.auth.view;
 
-public interface AuthView {
-    void showLoading();
+import com.example.foodplanner.base.BaseView;
 
-    void hideLoading();
-
+/**
+ * View interface for Auth screens following MVP pattern.
+ * Extends BaseView for common loading/error operations.
+ */
+public interface AuthView extends BaseView {
     void onLoginSuccess();
 
     void onSignUpSuccess();
