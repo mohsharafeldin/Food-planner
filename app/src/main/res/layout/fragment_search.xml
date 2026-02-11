@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark">
+
+    <!-- Sticky Header with Glass Effect -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_dark"
+        android:backgroundTint="@color/background_dark"
+        app:elevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/spacing_small">
+
+            <!-- Header with Title and Notifications -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/spacing_normal"
+                android:paddingTop="@dimen/spacing_medium"
+                android:paddingEnd="@dimen/spacing_normal"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:letterSpacing="-0.02"
+                    android:text="@string/discover"
+                    android:textColor="@color/text_primary"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+
+
+            </LinearLayout>
+
+            <!-- Search Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/spacing_normal"
+                android:layout_marginEnd="@dimen/spacing_normal"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_search_bar"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/spacing_medium"
+                android:paddingEnd="@dimen/spacing_medium">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/search"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/text_secondary" />
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/et_search"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/spacing_small"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:completionThreshold="1"
+                    android:hint="@string/find_meals"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text|textAutoComplete"
+                    android:maxLines="1"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="16sp" />
+
+                <ImageButton
+                    android:id="@+id/btn_filter"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/filters"
+                    android:src="@drawable/ic_filter"
+                    app:tint="@color/text_secondary" />
+
+            </LinearLayout>
+
+            <!-- Search Type Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacing_normal"
+                android:paddingBottom="4dp"
+                android:text="Search by:"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <!-- Search Type Chips -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacing_normal"
+                android:paddingEnd="@dimen/spacing_normal"
+                android:paddingBottom="8dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Name Search Chip (Default Active) -->
+                    <TextView
+                        android:id="@+id/chip_search_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_chip_active"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="Name"
+                        android:textAllCaps="false"
+                        android:textColor="@color/background_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <!-- Category Search Chip -->
+                    <TextView
+                        android:id="@+id/chip_search_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_chip_inactive"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="Category"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp" />
+
+                    <!-- Country Search Chip -->
+                    <TextView
+                        android:id="@+id/chip_search_country"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_chip_inactive"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="Country"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp" />
+
+                    <!-- Ingredient Search Chip -->
+                    <TextView
+                        android:id="@+id/chip_search_ingredient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_chip_inactive"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="Ingredient"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Content - Masonry Grid -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_normal"
+            android:paddingEnd="@dimen/spacing_normal"
+            android:paddingTop="@dimen/spacing_normal"
+            android:paddingBottom="@dimen/spacing_xxl">
+
+            <!-- Section Title -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/spacing_medium">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Result"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Staggered Grid RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_search_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                tools:itemCount="6"
+                tools:listitem="@layout/item_meal_discovery" />
+
+            <!-- Empty State -->
+            <LinearLayout
+                android:id="@+id/layout_empty_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_xxl"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:alpha="0.5"
+                    android:contentDescription="@string/no_results"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:text="@string/no_results"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Loading Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

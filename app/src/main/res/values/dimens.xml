@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing -->
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">12dp</dimen>
+    <dimen name="spacing_normal">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+    <dimen name="spacing_xxl">48dp</dimen>
+    
+    <!-- Corner Radius -->
+    <dimen name="corner_radius_small">8dp</dimen>
+    <dimen name="corner_radius_default">12dp</dimen>
+    <dimen name="corner_radius_medium">16dp</dimen>
+    <dimen name="corner_radius_large">20dp</dimen>
+    <dimen name="corner_radius_xl">24dp</dimen>
+    <dimen name="corner_radius_xxl">32dp</dimen>
+    
+    <!-- Text Sizes -->
+    <dimen name="text_size_xs">10sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_normal">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_xl">20sp</dimen>
+    <dimen name="text_size_xxl">24sp</dimen>
+    <dimen name="text_size_title">28sp</dimen>
+    <dimen name="text_size_hero">36sp</dimen>
+    
+    <!-- Card Dimensions -->
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_elevation_medium">4dp</dimen>
+    <dimen name="card_elevation_large">8dp</dimen>
+    
+    <!-- Icon Sizes -->
+    <dimen name="icon_size_small">18dp</dimen>
+    <dimen name="icon_size_medium">24dp</dimen>
+    <dimen name="icon_size_large">32dp</dimen>
+    <dimen name="icon_size_xl">48dp</dimen>
+    
+    <!-- Button Heights -->
+    <dimen name="button_height_small">36dp</dimen>
+    <dimen name="button_height_normal">48dp</dimen>
+    <dimen name="button_height_large">56dp</dimen>
+    
+    <!-- Bottom Navigation -->
+    <dimen name="bottom_nav_height">72dp</dimen>
+    <dimen name="bottom_nav_icon_size">26dp</dimen>
+    
+    <!-- Meal Card Dimensions -->
+    <dimen name="meal_card_image_size">80dp</dimen>
+    <dimen name="meal_card_image_large">112dp</dimen>
+    <dimen name="category_icon_size">64dp</dimen>
+    
+    <!-- Chip Dimensions -->
+    <dimen name="chip_height">36dp</dimen>
+    <dimen name="chip_min_width">72dp</dimen>
+</resources>

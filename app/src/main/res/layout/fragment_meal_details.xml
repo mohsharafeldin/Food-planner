@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark">
+
+    <!-- Hero Image Section (40vh ~ 320dp) -->
+    <FrameLayout
+        android:id="@+id/hero_section"
+        android:layout_width="match_parent"
+        android:layout_height="320dp">
+
+        <ImageView
+            android:id="@+id/iv_meal_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/meal_image"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_food_logo" />
+
+        <!-- Gradient Overlay -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_overlay" />
+
+        <!-- Floating Back Button (Top Left) -->
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top|start"
+            android:layout_margin="@dimen/spacing_medium"
+            android:background="@drawable/bg_circle_translucent"
+            android:contentDescription="@string/back"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/white" />
+
+        <!-- Floating Favorite Button (Top Right) -->
+        <ImageButton
+            android:id="@+id/btn_favorite"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="@dimen/spacing_medium"
+            android:background="@drawable/bg_circle_translucent"
+            android:contentDescription="@string/favorite"
+            android:padding="12dp"
+            android:src="@drawable/ic_favorite_border"
+            app:tint="@color/white" />
+
+        <!-- Category Badge (Bottom Left) -->
+        <TextView
+            android:id="@+id/tv_category_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="@dimen/spacing_medium"
+            android:background="@drawable/bg_chip_active"
+            android:paddingStart="12dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="6dp"
+            android:text="BREAKFAST"
+            android:textAllCaps="true"
+            android:textColor="@color/background_dark"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            tools:text="BREAKFAST" />
+
+    </FrameLayout>
+
+    <!-- Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="320dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_normal">
+
+            <!-- Meal Title -->
+            <TextView
+                android:id="@+id/tv_meal_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:letterSpacing="-0.02"
+                android:text="Meal Name"
+                android:textColor="@color/text_primary"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                tools:text="Mediterranean Pasta Salad" />
+
+            <!-- Tags -->
+            <TextView
+                android:id="@+id/tv_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:textColor="@color/primary_color"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                tools:text="#Pasta #Dinner #Healthy" />
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_to_plan"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="Add to Plan"
+                    android:textColor="@color/primary_color"
+                    app:icon="@drawable/ic_planner"
+                    app:iconTint="@color/primary_color"
+                    app:strokeColor="@color/primary_color" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_to_calendar"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Add to Calendar"
+                    android:textColor="@color/primary_color"
+                    app:icon="@drawable/ic_calendar"
+                    app:iconTint="@color/primary_color"
+                    app:strokeColor="@color/primary_color" />
+
+            </LinearLayout>
+
+            <!-- Description (if available) -->
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:lineSpacingExtra="4dp"
+                android:text="A fresh and colorful salad perfect for summer meals."
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="A fresh and colorful Mediterranean pasta salad with cherry tomatoes, cucumber, olives, and feta cheese."
+                tools:visibility="visible" />
+
+            <!-- Ingredients Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:text="@string/ingredients"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Horizontal Ingredients Carousel -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/layout_ingredients_carousel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Ingredient items will be added programmatically -->
+                    <!-- Each item: 112x112dp card with image and label -->
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <!-- Ingredients List (Alternative/Full List) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="6"
+                tools:listitem="@layout/item_ingredient" />
+
+            <!-- Instructions Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:text="@string/instructions"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Instructions Text -->
+            <TextView
+                android:id="@+id/tv_instructions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                tools:text="1. Boil water.\n2. Add pasta.\n3. Cook for 10 mins." />
+
+            <!-- Video Tutorial Section (Optional) -->
+            <LinearLayout
+                android:id="@+id/layout_video_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/video_tutorial"
+                    android:textColor="@color/text_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_video_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="12dp"
+                    app:cardBackgroundColor="@color/surface_dark"
+                    app:cardCornerRadius="@dimen/corner_radius_medium"
+                    app:cardElevation="@dimen/card_elevation">
+
+                    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                        android:id="@+id/youtube_player_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <WebView
+                        android:id="@+id/webview_video"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone" />
+
+                    <androidx.media3.ui.PlayerView
+                        android:id="@+id/exo_player_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        app:show_buffering="when_playing"
+                        app:show_shuffle_button="false" />
+
+                    <ImageView
+                        android:id="@+id/iv_video_thumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/video_tutorial"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        tools:src="@drawable/ic_food_logo" />
+                        
+                    <ImageView
+                         android:id="@+id/iv_play_overlay"
+                         android:layout_width="48dp"
+                         android:layout_height="48dp"
+                         android:layout_gravity="center"
+                         android:src="@drawable/ic_play"
+                         app:tint="@color/white"
+                         android:visibility="gone"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_watch_on_youtube"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/video_error_fallback"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/primary_color"
+                    app:icon="@drawable/ic_play"
+                    app:iconTint="@android:color/white"
+                    app:iconGravity="textStart"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

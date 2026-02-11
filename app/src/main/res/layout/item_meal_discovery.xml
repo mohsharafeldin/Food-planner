@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Discovery/Masonry card item with variable aspect ratios -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_medium"
+    app:cardBackgroundColor="@color/surface_dark"
+    app:cardCornerRadius="@dimen/corner_radius_medium"
+    app:cardElevation="@dimen/card_elevation">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Image with variable aspect ratio -->
+        <ImageView
+            android:id="@+id/iv_meal"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/meal_image"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_food_logo" />
+
+        <!-- Gradient Overlay -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_overlay_strong" />
+
+        <!-- Bookmark Button (Top Right) -->
+        <ImageButton
+            android:id="@+id/btn_bookmark"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="@dimen/spacing_small"
+            android:background="@drawable/bg_circle_translucent"
+            android:contentDescription="@string/save"
+            android:padding="6dp"
+            android:src="@drawable/ic_favorite_border"
+            app:tint="@color/white" />
+
+        <!-- Content Overlay (Bottom) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_small">
+
+            <!-- Match Badge (Optional) -->
+            <TextView
+                android:id="@+id/tv_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/bg_chip_active"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:text="98% Match"
+                android:textAllCaps="false"
+                android:textColor="@color/background_dark"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="98% Match"
+                tools:visibility="visible" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tv_meal_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Meal Name"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="Spicy Basil Chicken" />
+
+            <!-- Metadata Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:contentDescription="@string/cooking_time"
+                    android:src="@drawable/ic_time"
+                    app:tint="@color/white_70" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="20m"
+                    android:textColor="@color/white_70"
+                    android:textSize="11sp"
+                    tools:text="20m" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/iv_calories_icon"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:contentDescription="@string/calories"
+                    android:src="@drawable/ic_fire"
+                    android:visibility="gone"
+                    app:tint="@color/primary_color"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="450"
+                    android:textColor="@color/white_70"
+                    android:textSize="11sp"
+                    android:visibility="gone"
+                    tools:text="450"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.cardview.widget.CardView>
