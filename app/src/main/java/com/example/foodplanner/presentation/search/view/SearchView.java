@@ -1,7 +1,7 @@
 package com.example.foodplanner.presentation.search.view;
 
-import com.example.foodplanner.base.BaseView;
-import com.example.foodplanner.data.meal.model.Meal;
+import com.example.foodplanner.presentation.base.BaseView;
+import com.example.foodplanner.data.model.Meal;
 
 import java.util.List;
 

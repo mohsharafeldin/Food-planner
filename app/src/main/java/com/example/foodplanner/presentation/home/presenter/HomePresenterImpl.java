@@ -1,7 +1,7 @@
 package com.example.foodplanner.presentation.home.presenter;
 
-import com.example.foodplanner.base.BasePresenter;
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.presentation.base.BasePresenter;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.presentation.home.view.HomeView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

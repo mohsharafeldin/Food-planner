@@ -32,7 +32,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".auth.view.AuthActivity"
+            android:name=".presentation.auth.view.AuthActivity"
             android:exported="false" />
 
         <activity

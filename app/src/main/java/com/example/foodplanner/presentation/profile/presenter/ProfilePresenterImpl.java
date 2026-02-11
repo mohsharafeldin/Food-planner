@@ -1,8 +1,8 @@
 package com.example.foodplanner.presentation.profile.presenter;
 
-import com.example.foodplanner.base.BasePresenter;
+import com.example.foodplanner.presentation.base.BasePresenter;
 import com.example.foodplanner.data.firebase.FirebaseAuthHelper;
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.presentation.profile.view.ProfileView;
 import com.example.foodplanner.utils.SessionManager;
 

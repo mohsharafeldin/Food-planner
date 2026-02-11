@@ -35,8 +35,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.meal.model.Meal;
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.data.model.Meal;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.presentation.mealdetails.presenter.MealDetailsPresenterContract;
 import com.example.foodplanner.presentation.mealdetails.presenter.MealDetailsPresenterImpl;
 import com.example.foodplanner.utils.Constants;
@@ -150,20 +150,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         // Guest Mode Logic
         if (sessionManager.isGuest()) {
             if (btnAddToPlan != null) {
-                // btnAddToPlan.setEnabled(false); // Or keep enabled and show login prompt
-                // User requirement: "can only view..."
-                // Disabling might be clearer, or hiding.
-                // But typically we leave them and prompt login.
-                // The current listener ALREADY checks isGuest and shows error.
-                // I will update the error message to be more prompt-like or use a dialog.
-                // For now, let's keep the existing listener logic but maybe visually indicate
-                // it?
-                // Actually, the listeners already handle it:
-                // if (sessionManager.isGuest()) { showError("Please login..."); return; }
-                // So I will just leave it as is, or maybe update the "showError" to be a dialog
-                // to login?
-                // The prompt "Please login to add to plan" is sufficient for now.
-                // I will just make sure the calendar button is also restricted if not already.
+
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.example.foodplanner.presentation.favorites.presenter;
 
-import com.example.foodplanner.data.meal.model.FavoriteMeal;
+import com.example.foodplanner.data.model.FavoriteMeal;
 import com.example.foodplanner.presentation.favorites.view.FavoritesView;
 
 /**

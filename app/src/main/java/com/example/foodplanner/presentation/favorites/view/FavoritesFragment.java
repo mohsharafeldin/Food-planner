@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.meal.model.FavoriteMeal;
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.data.model.FavoriteMeal;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.presentation.favorites.presenter.FavoritesPresenterContract;
 import com.example.foodplanner.presentation.favorites.presenter.FavoritesPresenterImpl;
 import com.example.foodplanner.utils.SessionManager;
@@ -227,23 +227,7 @@ public class FavoritesFragment extends Fragment implements FavoritesView,
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                // Get the favorite and remove it
-                // For now, let's reload the data
-                // We need to get the actual item from adapter to remove it via presenter
-                // Since adapter doesn't expose list easily, we rely on presenter's
-                // loadFavorites
-                // But swipe needs the item.
-                // Let's assume implementing swipe properly requires adapter.getItem(position)
-                // which might not exist.
-                // The original code passed 'presenter.loadFavorites()' on swipe, which implies
-                // it didn't actually delete it via presenter properly using the swiped item?
-                // Wait, the original code had:
-                // onSwiped { presenter.loadFavorites(); }
-                // This means swipe did NOTHING to the DB. It just reloaded.
-                // That looks like a bug or incomplete feature in the original code.
-                // I won't fix unrelated bugs unless necessary, but this might be confusing.
-                // I will leave it as is for now to avoid scope creep, or just call
-                // loadFavorites as before.
+
                 presenter.loadFavorites();
             }
         };

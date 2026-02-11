@@ -17,8 +17,8 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.meal.model.PlannedMeal;
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.data.model.PlannedMeal;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.presentation.planner.presenter.PlannerPresenterContract;
 import com.example.foodplanner.presentation.planner.presenter.PlannerPresenterImpl;
 import com.example.foodplanner.utils.Constants;

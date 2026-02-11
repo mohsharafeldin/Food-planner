@@ -1,6 +1,6 @@
 package com.example.foodplanner.presentation.videoplayer.presenter;
 
-import com.example.foodplanner.base.BasePresenter;
+import com.example.foodplanner.presentation.base.BasePresenter;
 import com.example.foodplanner.presentation.videoplayer.view.VideoPlayerView;
 
 /**

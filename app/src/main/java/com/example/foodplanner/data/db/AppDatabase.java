@@ -6,10 +6,10 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.foodplanner.data.meal.datasource.local.FavoriteMealDAO;
-import com.example.foodplanner.data.meal.datasource.local.PlannedMealDAO;
-import com.example.foodplanner.data.meal.model.FavoriteMeal;
-import com.example.foodplanner.data.meal.model.PlannedMeal;
+import com.example.foodplanner.data.datasource.local.FavoriteMealDAO;
+import com.example.foodplanner.data.datasource.local.PlannedMealDAO;
+import com.example.foodplanner.data.model.FavoriteMeal;
+import com.example.foodplanner.data.model.PlannedMeal;
 
 @Database(entities = { FavoriteMeal.class, PlannedMeal.class }, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {

@@ -1,13 +1,13 @@
 package com.example.foodplanner.presentation.search.presenter;
 
-import com.example.foodplanner.base.BasePresenter;
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.presentation.base.BasePresenter;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.presentation.search.view.SearchView;
 import com.example.foodplanner.utils.Constants;
 
-import com.example.foodplanner.data.meal.model.Area;
-import com.example.foodplanner.data.meal.model.Category;
-import com.example.foodplanner.data.meal.model.Ingredient;
+import com.example.foodplanner.data.model.Area;
+import com.example.foodplanner.data.model.Category;
+import com.example.foodplanner.data.model.Ingredient;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -139,8 +139,8 @@ public class SearchPresenterImpl extends BasePresenter<SearchView> implements Se
                 repository.getAllFavorites(userId).first(new ArrayList<>()),
                 (response, favorites) -> {
                     if (response.getMeals() != null) {
-                        for (com.example.foodplanner.data.meal.model.Meal meal : response.getMeals()) {
-                            for (com.example.foodplanner.data.meal.model.FavoriteMeal fav : favorites) {
+                        for (com.example.foodplanner.data.model.Meal meal : response.getMeals()) {
+                            for (com.example.foodplanner.data.model.FavoriteMeal fav : favorites) {
                                 if (fav.getIdMeal().equals(meal.getIdMeal())) {
                                     meal.setFavorite(true);
                                     break;
@@ -178,8 +178,8 @@ public class SearchPresenterImpl extends BasePresenter<SearchView> implements Se
                 repository.getAllFavorites(userId).first(new ArrayList<>()),
                 (response, favorites) -> {
                     if (response.getMeals() != null) {
-                        for (com.example.foodplanner.data.meal.model.Meal meal : response.getMeals()) {
-                            for (com.example.foodplanner.data.meal.model.FavoriteMeal fav : favorites) {
+                        for (com.example.foodplanner.data.model.Meal meal : response.getMeals()) {
+                            for (com.example.foodplanner.data.model.FavoriteMeal fav : favorites) {
                                 if (fav.getIdMeal().equals(meal.getIdMeal())) {
                                     meal.setFavorite(true);
                                     break;
@@ -217,8 +217,8 @@ public class SearchPresenterImpl extends BasePresenter<SearchView> implements Se
                 repository.getAllFavorites(userId).first(new ArrayList<>()),
                 (response, favorites) -> {
                     if (response.getMeals() != null) {
-                        for (com.example.foodplanner.data.meal.model.Meal meal : response.getMeals()) {
-                            for (com.example.foodplanner.data.meal.model.FavoriteMeal fav : favorites) {
+                        for (com.example.foodplanner.data.model.Meal meal : response.getMeals()) {
+                            for (com.example.foodplanner.data.model.FavoriteMeal fav : favorites) {
                                 if (fav.getIdMeal().equals(meal.getIdMeal())) {
                                     meal.setFavorite(true);
                                     break;
@@ -263,8 +263,8 @@ public class SearchPresenterImpl extends BasePresenter<SearchView> implements Se
                 repository.getAllFavorites(userId).first(new ArrayList<>()),
                 (response, favorites) -> {
                     if (response.getMeals() != null) {
-                        for (com.example.foodplanner.data.meal.model.Meal meal : response.getMeals()) {
-                            for (com.example.foodplanner.data.meal.model.FavoriteMeal fav : favorites) {
+                        for (com.example.foodplanner.data.model.Meal meal : response.getMeals()) {
+                            for (com.example.foodplanner.data.model.FavoriteMeal fav : favorites) {
                                 if (fav.getIdMeal().equals(meal.getIdMeal())) {
                                     meal.setFavorite(true);
                                     break;

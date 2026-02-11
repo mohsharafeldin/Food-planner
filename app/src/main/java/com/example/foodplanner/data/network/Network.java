@@ -1,6 +1,6 @@
 package com.example.foodplanner.data.network;
 
-import com.example.foodplanner.data.meal.datasource.remote.MealApiService;
+import com.example.foodplanner.data.datasource.remote.MealApiService;
 import com.example.foodplanner.utils.Constants;
 
 import retrofit2.Retrofit;

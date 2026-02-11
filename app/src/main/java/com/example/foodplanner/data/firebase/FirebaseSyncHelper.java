@@ -2,8 +2,8 @@ package com.example.foodplanner.data.firebase;
 
 import android.util.Log;
 
-import com.example.foodplanner.data.meal.model.FavoriteMeal;
-import com.example.foodplanner.data.meal.model.PlannedMeal;
+import com.example.foodplanner.data.model.FavoriteMeal;
+import com.example.foodplanner.data.model.PlannedMeal;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,8 +32,7 @@ public class FirebaseSyncHelper {
 
     private FirebaseSyncHelper() {
         database = FirebaseDatabase.getInstance();
-        // Enable offline persistence if needed
-        // database.setPersistenceEnabled(true);
+
     }
 
     public static synchronized FirebaseSyncHelper getInstance() {

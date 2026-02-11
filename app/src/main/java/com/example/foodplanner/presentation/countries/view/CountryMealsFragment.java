@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foodplanner.R;
 import com.example.foodplanner.presentation.countries.presenter.CountryMealsPresenterContract;
 import com.example.foodplanner.presentation.countries.presenter.CountryMealsPresenterImpl;
-import com.example.foodplanner.data.meal.model.Meal;
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.data.model.Meal;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.presentation.search.view.MealAdapter;
 
 import java.util.List;

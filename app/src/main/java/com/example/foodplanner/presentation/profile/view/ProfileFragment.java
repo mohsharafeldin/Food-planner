@@ -15,8 +15,8 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.auth.view.AuthActivity;
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.presentation.auth.view.AuthActivity;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.presentation.profile.presenter.ProfilePresenterContract;
 import com.example.foodplanner.presentation.profile.presenter.ProfilePresenterImpl;
 import com.example.foodplanner.utils.SessionManager;

@@ -1,6 +1,6 @@
 package com.example.foodplanner.presentation.mealdetails.presenter;
 
-import com.example.foodplanner.data.meal.model.Meal;
+import com.example.foodplanner.data.model.Meal;
 import com.example.foodplanner.presentation.mealdetails.view.MealDetailsView;
 
 /**

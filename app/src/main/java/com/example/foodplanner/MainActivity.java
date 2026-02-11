@@ -8,7 +8,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.foodplanner.data.meal.repositry.MealRepository;
+import com.example.foodplanner.repositry.MealRepository;
 import com.example.foodplanner.utils.SessionManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
